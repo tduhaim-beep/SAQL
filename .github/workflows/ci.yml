@@ -35,6 +35,8 @@ jobs:
         run: test -f package-lock.json
       - run: npm run r0:env-check
       - run: npm ci
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
       - run: npm run db:validate
       - run: npm run db:generate
       - run: npm run db:assert-migration

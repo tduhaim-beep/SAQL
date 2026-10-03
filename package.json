@@ -51,6 +51,7 @@
   },
   "type": "module",
   "overrides": {
+    "deepmerge-ts": "8.0.2",
     "prisma": {
       "mysql2": "3.23.1"
     }
