@@ -1,0 +1,91 @@
+﻿Role,Resource,Action,Decision,Context / Condition,Requirement refs
+Visitor,Public Content,view,ALLOW,Public data only,BR-PUB-001..006
+Visitor,Published Opportunity,view/search,ALLOW,Public data only,BR-PUB-001..006
+Visitor,Verified Organization Public Profile,view,ALLOW,Public data only,BR-PUB-001..006
+Visitor,Application,create,DENY,Registration/authentication required,BR-APL-001
+Student/Trainee,Student Profile,view/edit,ALLOW-CONTEXT,own profile,"BR-STU-001, BR-STU-002"
+Student/Trainee,Published Opportunity,view/search,ALLOW-CONTEXT,published/public/eligible visibility,"BR-STU-003, BR-PUB-004"
+Student/Trainee,Application,create/view/update info,ALLOW-CONTEXT,own applications only,"BR-APL-001..003, BR-APL-005"
+Student/Trainee,Application,withdraw,ALLOW-CONTEXT,own application before ACCEPTED,BR-APL-008
+Student/Trainee,Training Journey,view,ALLOW-CONTEXT,own journey,BR-STU-004
+Student/Trainee,Plan Instance/Task,view/execute,ALLOW-CONTEXT,own assigned journey/tasks,BR-STU-005..007
+Student/Trainee,Evidence,submit/resubmit,ALLOW-CONTEXT,own assigned task/academic requirement,"BR-STU-006, BR-ACA-013"
+Student/Trainee,Exception,create/view,ALLOW-CONTEXT,own journey; scoped visibility,"BR-STU-010, BR-EXC-001"
+Student/Trainee,Academic Overlay,invite university/upload evidence,ALLOW-CONTEXT,own academic journey,BR-STU-011..013
+Student/Trainee,Training Score/Report,view,ALLOW-CONTEXT,own journey; visibility policy satisfied,"BR-STU-008, BR-STU-009"
+Student/Trainee,Organization Decision,accept/reject applicant,DENY,No authority,BR-GOV-001
+Student/Trainee,Academic Decision,approve/close,DENY,No authority,"BR-STU-013, BR-ACA-014"
+Student/Trainee,Other User Data,view,DENY,No authority,NFR-004
+Organization Admin,Organization Profile,view,ALLOW-CONTEXT,own organization,BR-ORG-002
+Organization Training Officer,Organization Profile,view,ALLOW-CONTEXT,own organization,BR-ORG-002
+Organization Admin,Organization Profile,edit,ALLOW-CONTEXT,own organization administrative fields,BR-ORG-002
+Organization Admin,Organization Users,manage,ALLOW-CONTEXT,own organization; within delegated admin authority,BR-GOV-004
+Organization Training Officer,Opportunity,create/edit/publish/close,ALLOW-CONTEXT,own organization resources only,BR-OPP-001..010
+Organization Training Officer,Application,view/accept/reject/request info,ALLOW-CONTEXT,own organization resources only,BR-APL-004..009
+Organization Training Officer,Training Journey,view/manage operational actions,ALLOW-CONTEXT,own organization resources only,BR-ORG-005..012
+Organization Training Officer,Training Plan Template,create/version/publish/archive,ALLOW-CONTEXT,own organization resources only,BR-TPL-001..015
+Organization Training Officer,Plan Instance,assign/controlled change,ALLOW-CONTEXT,own organization resources only,"BR-ORG-006, BR-TPL-012..014"
+Organization Training Officer,Field Supervisor Assignment,assign/change,ALLOW-CONTEXT,own organization resources only,BR-ORG-007
+Organization Training Officer,Evidence/Task,view/review as configured,ALLOW-CONTEXT,own organization resources only,BR-ORG-008
+Organization Training Officer,Organization Assessment,create/submit/override within policy,ALLOW-CONTEXT,own organization resources only,"BR-ORG-011, BR-SCR-001..009"
+Organization Training Officer,Organization Reports,view/export,ALLOW-CONTEXT,own organization resources only,"BR-ORG-013, BR-REP-003, BR-REP-008"
+Organization Training Officer,Organization Exception,create/manage,ALLOW-CONTEXT,own organization resources only,"BR-ORG-010, BR-EXC-001..008"
+Organization Training Officer,Academic Decision,approve/close,DENY,University authority only,"BR-ACA-005, BR-ACA-012"
+Field Supervisor,Assigned Trainee/Journey,view,ALLOW-CONTEXT,assigned trainees/tasks only,BR-SUP-002
+Field Supervisor,Assigned Task/Evidence,review,ALLOW-CONTEXT,assigned trainees/tasks only,BR-SUP-003
+Field Supervisor,Feedback,create,ALLOW-CONTEXT,assigned trainees/tasks only,BR-SUP-004
+Field Supervisor,Field Assessment,submit,ALLOW-CONTEXT,assigned trainees/tasks only,BR-SUP-005
+Field Supervisor,Exception,create,ALLOW-CONTEXT,assigned trainees/tasks only,BR-EXC-001
+Field Supervisor,Opportunity,manage,DENY,Outside supervisor assignment,BR-SUP-002
+Field Supervisor,Plan Template,edit/publish,DENY,Outside supervisor assignment,BR-TPL-001
+Field Supervisor,Other Trainees,view,DENY,Outside supervisor assignment,BR-SUP-008
+Field Supervisor,Academic Decision,approve/close,DENY,Outside supervisor assignment,BR-ACA-012
+University Training Officer,University Program/Framework,create/version/manage,ALLOW-CONTEXT,own institution/program/cases only,BR-UAF-001..010
+University Training Officer,University Student Cases,view/manage operational,ALLOW-CONTEXT,own institution/program/cases only,"BR-ACA-003, BR-REP-004"
+University Training Officer,Academic Supervisor Assignment,assign/change,ALLOW-CONTEXT,own institution/program/cases only,BR-ACA-006
+University Training Officer,Alignment,create/review/request adjustment,ALLOW-CONTEXT,own institution/program/cases only,BR-ALN-001..010
+University Training Officer,Academic Supplement,create/manage,ALLOW-CONTEXT,own institution/program/cases only,BR-ALN-005
+University Training Officer,University Reports,view/export,ALLOW-CONTEXT,own institution/program/cases only,"BR-REP-004, BR-REP-008"
+University Training Officer,Academic Exception,manage,ALLOW-CONTEXT,own institution/program/cases only,BR-EXC-001..008
+University Authorized Approver,Academic Placement/Overlay,approve/reject/request info,ALLOW-CONTEXT,own institution + explicit delegated authority; verified actor,BR-ACA-005
+University Authorized Approver,Alignment Decision,approve/approve with supplement/reject,ALLOW-CONTEXT,own institution + explicit delegated authority; verified actor,BR-ALN-007
+University Authorized Approver,Academic Closure,close,ALLOW-CONTEXT,own institution + explicit delegated authority; verified actor,BR-ACA-012
+University Training Officer,Organization Plan Template,edit,DENY,Organization-owned plan,BR-GOV-007
+University Authorized Approver,Training Score,override organization score,DENY,Organization-owned training score,BR-SCR-010
+Academic Supervisor,Assigned Student Academic Case,view,ALLOW-CONTEXT,assigned students only unless explicit wider authority,"BR-SUP-001, BR-SUP-008"
+Academic Supervisor,Academic Reports/Requirements,review,ALLOW-CONTEXT,assigned students only unless explicit wider authority,BR-SUP-006
+Academic Supervisor,Academic Evaluation,submit,ALLOW-CONTEXT,assigned students only unless explicit wider authority,BR-SUP-007
+Academic Supervisor,Academic Feedback,create,ALLOW-CONTEXT,assigned students only unless explicit wider authority,BR-SUP-006
+Academic Supervisor,Academic Closure,close,DENY-BY-DEFAULT,Requires separate authorized approver permission,BR-ACA-012
+Academic Supervisor,University Administration,manage,DENY,Not implied by supervisor role,BR-SUP-001
+Guest University Representative,Invited Academic Case,view,ALLOW-CONTEXT,verified representative + active case-scoped invitation + granted action,BR-ACA-004
+Guest University Representative,Invited Academic Action,execute,ALLOW-CONTEXT,verified representative + active case-scoped invitation + granted action,"BR-ACA-004, BR-ACA-005"
+Guest University Representative,Allowed Progress/Reports,view,ALLOW-CONTEXT,verified representative + active case-scoped invitation + granted action,BR-ACA-004
+Guest University Representative,All University Students,view,DENY,Guest access is case-scoped,BR-ACA-004
+Guest University Representative,University Programs,manage,DENY,Guest access is case-scoped,BR-ACA-004
+Guest University Representative,Institutional Reports,view,DENY,Guest access is case-scoped,BR-ACA-004
+Guest University Representative,Other Cases,view,DENY,Guest access is case-scoped,BR-ACA-004
+Super Admin,Platform Admin Roles,manage,PRIVILEGED,named account; MFA; audit; not daily-use,"BR-ADM-001, BR-ADM-007"
+Super Admin,Platform Entity,suspend/restore high-risk,PRIVILEGED,reason + audit; dual review may be required by policy,BR-ADM-009
+Operations Admin,Operational Queue,view/manage support workflow,ALLOW-CONTEXT,platform operational scope,BR-ADM-002
+Operations Admin,Accounts/Entities,assist non-decision operations,ALLOW-CONTEXT,minimum data needed; no party decision impersonation,"BR-ADM-002, BR-ADM-010"
+Verification Admin,Organization Verification,approve/reject/request info,ALLOW-CONTEXT,verification data only; audit required,"BR-ADM-003, BR-VER-001..007"
+Verification Admin,University Representative Verification,approve/reject/request info,ALLOW-CONTEXT,verification data only; audit required,"BR-ADM-003, BR-VER-003"
+Moderation Admin,Opportunity/Content,review/suspend/restore,ALLOW-CONTEXT,moderation scope only; audit required,"BR-ADM-004, BR-ADM-009"
+Moderation Admin,Reported Content,review,ALLOW-CONTEXT,moderation scope only; audit required,BR-ADM-004
+Support Admin,Support Case/User Metadata,view/assist,ALLOW-CONTEXT,minimum necessary; no silent business decision; elevation audited,"BR-ADM-005, BR-ADM-010"
+Security/Compliance Admin,Security Audit,view/investigate,ALLOW-CONTEXT,security/compliance scope; no business decision ownership,"BR-ADM-006, BR-GOV-003"
+Security/Compliance Admin,Privileged Action History,view,ALLOW-CONTEXT,security/compliance scope; no business decision ownership,BR-ADM-008
+Security/Compliance Admin,Compliance Evidence,view/manage,ALLOW-CONTEXT,security/compliance scope; no business decision ownership,BR-ADM-006
+Super Admin,Academic Decision,approve/grade/close,DENY,Platform admins do not act as university,BR-ADM-010
+Super Admin,Training Evaluation,submit as field supervisor,DENY,Platform admins do not act as training owner,BR-ADM-010
+Operations Admin,Academic Decision,approve/grade/close,DENY,Platform admins do not act as university,BR-ADM-010
+Operations Admin,Training Evaluation,submit as field supervisor,DENY,Platform admins do not act as training owner,BR-ADM-010
+Verification Admin,Academic Decision,approve/grade/close,DENY,Platform admins do not act as university,BR-ADM-010
+Verification Admin,Training Evaluation,submit as field supervisor,DENY,Platform admins do not act as training owner,BR-ADM-010
+Moderation Admin,Academic Decision,approve/grade/close,DENY,Platform admins do not act as university,BR-ADM-010
+Moderation Admin,Training Evaluation,submit as field supervisor,DENY,Platform admins do not act as training owner,BR-ADM-010
+Support Admin,Academic Decision,approve/grade/close,DENY,Platform admins do not act as university,BR-ADM-010
+Support Admin,Training Evaluation,submit as field supervisor,DENY,Platform admins do not act as training owner,BR-ADM-010
+Security/Compliance Admin,Academic Decision,approve/grade/close,DENY,Platform admins do not act as university,BR-ADM-010
+Security/Compliance Admin,Training Evaluation,submit as field supervisor,DENY,Platform admins do not act as training owner,BR-ADM-010

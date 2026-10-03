@@ -1,0 +1,442 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum BusinessRole {
+  SUPER_ADMIN
+  OPERATIONS_ADMIN
+  VERIFICATION_ADMIN
+  MODERATION_ADMIN
+  SUPPORT_ADMIN
+  SECURITY_COMPLIANCE_ADMIN
+  STUDENT_TRAINEE
+  ORGANIZATION_ADMIN
+  ORGANIZATION_TRAINING_OFFICER
+  FIELD_SUPERVISOR
+  UNIVERSITY_TRAINING_OFFICER
+  UNIVERSITY_AUTHORIZED_APPROVER
+  ACADEMIC_SUPERVISOR
+  GUEST_UNIVERSITY_REPRESENTATIVE
+}
+
+enum AccountStatus {
+  PENDING_VERIFICATION
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+enum VerificationStatus {
+  REGISTERED
+  PENDING_VERIFICATION
+  MORE_INFO_REQUIRED
+  VERIFIED
+  SUSPENDED
+  REJECTED
+}
+enum OrganizationType {
+  PRIVATE
+  GOVERNMENT
+  SEMI_GOVERNMENT
+  NON_PROFIT
+  OTHER
+}
+enum ProgramType {
+  COOPERATIVE_ACADEMIC
+  INDEPENDENT_SUMMER
+  GRADUATE_TAMHEER_LIKE
+}
+enum AcademicOverlayMode {
+  REQUIRED
+  OPTIONAL
+  NOT_APPLICABLE
+}
+enum AcademicParticipationMode {
+  INSTITUTIONAL
+  GUEST
+  SELF_DOCUMENTED
+}
+enum OpportunityStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  FILLED
+  EXPIRED
+  SUSPENDED
+}
+enum ApplicationStatus {
+  APPLIED
+  UNDER_REVIEW
+  MORE_INFO_REQUIRED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+enum TrainingJourneyStatus {
+  PENDING_START
+  ACTIVE
+  ON_HOLD
+  COMPLETION_PENDING
+  COMPLETED
+  WITHDRAWN
+  TERMINATED
+}
+enum AcademicOverlayStatus {
+  NOT_STARTED
+  APPROVAL_PENDING
+  MORE_INFO_REQUIRED
+  APPROVED
+  ACADEMIC_ACTIVE
+  COMPLETION_PENDING
+  CLOSED
+  REJECTED
+}
+enum AcademicTrustState {
+  NONE
+  STUDENT_REPORTED
+  EVIDENCE_UPLOADED
+  UNIVERSITY_VERIFIED
+}
+enum TrainingPlanVersionStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+enum PlanInstanceStatus {
+  ASSIGNED
+  ACTIVE
+  COMPLETION_PENDING
+  COMPLETED
+  CANCELLED
+}
+enum TrainingTaskStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  SUBMITTED
+  REVISION_REQUIRED
+  COMPLETED
+  CANCELLED
+}
+enum AlignmentStatus {
+  DRAFT
+  IN_REVIEW
+  ADJUSTMENT_REQUESTED
+  APPROVED
+  APPROVED_WITH_SUPPLEMENT
+  REJECTED
+}
+enum ExceptionStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_EXTERNAL
+  RESOLVED
+  CLOSED
+}
+
+model AppUser {
+  id              String           @id @default(cuid())
+  externalSubject String?          @unique
+  displayName     String
+  email           String?          @unique
+  phone           String?
+  status          AccountStatus    @default(PENDING_VERIFICATION)
+  roles           RoleAssignment[]
+  studentProfile  StudentProfile?
+  applications    Application[]
+  journeys        TrainingJourney[] @relation("TraineeJourneys")
+  auditEvents     AuditEvent[]     @relation("AuditActor")
+  ownedExceptions TrainingException[] @relation("ExceptionOwner")
+  resolvedExceptions TrainingException[] @relation("ExceptionResolutionActor")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model RoleAssignment {
+  id            String       @id @default(cuid())
+  userId        String
+  role          BusinessRole
+  organizationId String?
+  institutionId String?
+  user          AppUser      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization  Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  institution   Institution? @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  createdAt     DateTime     @default(now())
+  @@index([userId, role])
+  @@index([organizationId, role])
+  @@index([institutionId, role])
+}
+
+model Institution {
+  id          String             @id @default(cuid())
+  code        String             @unique
+  nameAr      String
+  active      Boolean            @default(true)
+  roles       RoleAssignment[]
+  frameworks  AcademicFramework[]
+  overlays    AcademicOverlay[]
+  studentProfiles StudentProfile[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model Organization {
+  id                 String             @id @default(cuid())
+  code               String             @unique
+  publicSlug         String?            @unique
+  nameAr             String
+  type               OrganizationType
+  verificationStatus VerificationStatus @default(REGISTERED)
+  roles              RoleAssignment[]
+  opportunities      Opportunity[]
+  journeys           TrainingJourney[]
+  planTemplates      TrainingPlanTemplate[]
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+}
+
+model StudentProfile {
+  id              String       @id @default(cuid())
+  userId          String       @unique
+  institutionId   String?
+  universityName  String?
+  major           String?
+  user            AppUser      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution     Institution? @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model Opportunity {
+  id              String            @id @default(cuid())
+  organizationId  String
+  planTemplateId  String?
+  titleAr         String
+  descriptionAr   String
+  city            String?
+  programType     ProgramType
+  overlayMode     AcademicOverlayMode @default(NOT_APPLICABLE)
+  seats           Int               @default(1)
+  status          OpportunityStatus @default(DRAFT)
+  startsAt        DateTime?
+  endsAt          DateTime?
+  organization    Organization      @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  planTemplate    TrainingPlanTemplate? @relation(fields: [planTemplateId], references: [id], onDelete: SetNull)
+  applications    Application[]
+  journeys        TrainingJourney[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  @@index([organizationId, status])
+  @@index([programType, status])
+}
+
+model Application {
+  id            String            @id @default(cuid())
+  opportunityId String
+  studentUserId String
+  status        ApplicationStatus @default(APPLIED)
+  opportunity   Opportunity       @relation(fields: [opportunityId], references: [id], onDelete: Restrict)
+  student       AppUser           @relation(fields: [studentUserId], references: [id], onDelete: Restrict)
+  journey       TrainingJourney?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  @@unique([opportunityId, studentUserId])
+  @@index([studentUserId, status])
+}
+
+model TrainingJourney {
+  id               String                @id @default(cuid())
+  traineeUserId    String
+  organizationId   String
+  opportunityId    String?
+  applicationId    String?               @unique
+  programType      ProgramType
+  overlayMode      AcademicOverlayMode
+  status           TrainingJourneyStatus @default(PENDING_START)
+  expectedStartAt  DateTime?
+  actualStartAt    DateTime?
+  actualEndAt      DateTime?
+  trainee          AppUser               @relation("TraineeJourneys", fields: [traineeUserId], references: [id], onDelete: Restrict)
+  organization     Organization          @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  opportunity      Opportunity?          @relation(fields: [opportunityId], references: [id], onDelete: SetNull)
+  application      Application?          @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  planInstance     TrainingPlanInstance?
+  academicOverlay  AcademicOverlay?
+  alignment        Alignment?
+  exceptions       TrainingException[]
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  @@index([traineeUserId, status])
+  @@index([organizationId, status])
+}
+
+model TrainingPlanTemplate {
+  id             String                @id @default(cuid())
+  organizationId String
+  nameAr         String
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  versions       TrainingPlanVersion[]
+  opportunities  Opportunity[]
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  @@index([organizationId])
+}
+
+model TrainingPlanVersion {
+  id             String                  @id @default(cuid())
+  templateId     String
+  versionNumber  Int
+  status         TrainingPlanVersionStatus @default(DRAFT)
+  publishedAt    DateTime?
+  template       TrainingPlanTemplate    @relation(fields: [templateId], references: [id], onDelete: Restrict)
+  stages         TrainingStageTemplate[]
+  instances      TrainingPlanInstance[]
+  alignments     Alignment[]
+  createdAt      DateTime                @default(now())
+  @@unique([templateId, versionNumber])
+  @@index([templateId, status])
+}
+
+model TrainingStageTemplate {
+  id            String                 @id @default(cuid())
+  planVersionId String
+  sortOrder     Int
+  nameAr        String
+  weight        Decimal?               @db.Decimal(5,2)
+  planVersion   TrainingPlanVersion    @relation(fields: [planVersionId], references: [id], onDelete: Cascade)
+  tasks         TrainingTaskTemplate[]
+  @@unique([planVersionId, sortOrder])
+}
+
+model TrainingTaskTemplate {
+  id               String                @id @default(cuid())
+  stageTemplateId  String
+  sortOrder        Int
+  titleAr          String
+  mandatory        Boolean               @default(true)
+  completionMethod String
+  weight           Decimal?              @db.Decimal(5,2)
+  stageTemplate    TrainingStageTemplate @relation(fields: [stageTemplateId], references: [id], onDelete: Cascade)
+  taskInstances    TrainingTaskInstance[]
+  @@unique([stageTemplateId, sortOrder])
+}
+
+model TrainingPlanInstance {
+  id              String             @id @default(cuid())
+  journeyId       String             @unique
+  sourceVersionId String
+  status          PlanInstanceStatus @default(ASSIGNED)
+  frozenAt        DateTime           @default(now())
+  journey         TrainingJourney    @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  sourceVersion   TrainingPlanVersion @relation(fields: [sourceVersionId], references: [id], onDelete: Restrict)
+  tasks           TrainingTaskInstance[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model TrainingTaskInstance {
+  id              String               @id @default(cuid())
+  planInstanceId  String
+  taskTemplateId  String
+  status          TrainingTaskStatus   @default(NOT_STARTED)
+  score100        Decimal?             @db.Decimal(6,3)
+  planInstance    TrainingPlanInstance @relation(fields: [planInstanceId], references: [id], onDelete: Cascade)
+  taskTemplate    TrainingTaskTemplate @relation(fields: [taskTemplateId], references: [id], onDelete: Restrict)
+  updatedAt       DateTime             @updatedAt
+  @@unique([planInstanceId, taskTemplateId])
+}
+
+model AcademicFramework {
+  id            String                     @id @default(cuid())
+  institutionId String
+  nameAr        String
+  programType   ProgramType
+  institution   Institution                @relation(fields: [institutionId], references: [id], onDelete: Restrict)
+  versions      AcademicFrameworkVersion[]
+  createdAt     DateTime                   @default(now())
+  updatedAt     DateTime                   @updatedAt
+}
+
+model AcademicFrameworkVersion {
+  id            String              @id @default(cuid())
+  frameworkId   String
+  versionNumber Int
+  publishedAt   DateTime?
+  framework     AcademicFramework   @relation(fields: [frameworkId], references: [id], onDelete: Restrict)
+  alignments    Alignment[]
+  createdAt     DateTime            @default(now())
+  @@unique([frameworkId, versionNumber])
+}
+
+model AcademicOverlay {
+  id                  String                    @id @default(cuid())
+  journeyId           String                    @unique
+  institutionId       String?
+  status              AcademicOverlayStatus   @default(NOT_STARTED)
+  participationMode   AcademicParticipationMode
+  trustState          AcademicTrustState      @default(NONE)
+  journey             TrainingJourney           @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  institution         Institution?              @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  exceptions          TrainingException[]
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+}
+
+model Alignment {
+  id                 String                   @id @default(cuid())
+  journeyId          String                   @unique
+  frameworkVersionId String
+  planVersionId      String
+  status             AlignmentStatus          @default(DRAFT)
+  journey            TrainingJourney          @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  frameworkVersion   AcademicFrameworkVersion @relation(fields: [frameworkVersionId], references: [id], onDelete: Restrict)
+  planVersion        TrainingPlanVersion      @relation(fields: [planVersionId], references: [id], onDelete: Restrict)
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+}
+
+model TrainingException {
+  id                    String          @id @default(cuid())
+  journeyId             String
+  academicOverlayId     String?
+  typeCode              String
+  status                ExceptionStatus @default(OPEN)
+  ownerUserId           String?
+  severityCode          String?
+  impactSummary         String?
+  blocking              Boolean         @default(false)
+  escalated             Boolean         @default(false)
+  waitingParty          String?
+  waitingAction         String?
+  resolutionSummary     String?
+  resolutionActorUserId String?
+  resolutionEvidence    Json?
+  journey               TrainingJourney @relation(fields: [journeyId], references: [id], onDelete: Restrict)
+  academicOverlay       AcademicOverlay? @relation(fields: [academicOverlayId], references: [id], onDelete: SetNull)
+  owner                 AppUser?         @relation("ExceptionOwner", fields: [ownerUserId], references: [id], onDelete: SetNull)
+  resolutionActor       AppUser?         @relation("ExceptionResolutionActor", fields: [resolutionActorUserId], references: [id], onDelete: SetNull)
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  @@index([journeyId, status])
+  @@index([journeyId, blocking, status])
+  @@index([academicOverlayId, status])
+  @@index([ownerUserId, status])
+}
+
+model AuditEvent {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  action      String
+  entityType  String
+  entityId    String
+  metadata    Json?
+  actor       AppUser? @relation("AuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  @@index([entityType, entityId, createdAt])
+  @@index([actorUserId, createdAt])
+}

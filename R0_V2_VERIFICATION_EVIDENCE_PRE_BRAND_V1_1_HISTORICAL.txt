@@ -1,0 +1,106 @@
+# R0 v2 Verification Evidence
+Timestamp UTC: 2026-09-30T20:23:10Z
+Node runtime available here: v22.16.0
+npm: 10.9.2
+
+## Environment blockers
+registry.npmjs.org: BLOCKED (DNS)
+Approved Node runtime: v24.x; current environment is not approved runtime.
+
+## npm run foundation:verify
+
+> saql-pilot-v2@0.1.0 foundation:verify
+> node scripts/verify-repo.mjs && node scripts/check-control-pack.mjs && node scripts/check-architecture.mjs && node scripts/check-secrets.mjs && npm run test:foundation:node
+
+Repository R0 v2 structure: OK
+Implementation-control baseline: OK
+Architecture import guard: OK
+Basic secret scan: OK
+
+> saql-pilot-v2@0.1.0 test:foundation:node
+> node --test tests/foundation/*.test.mjs
+
+TAP version 13
+# Subtest: current traceability contains 225 requirements
+ok 1 - current traceability contains 225 requirements
+  ---
+  duration_ms: 2.280427
+  type: 'test'
+  ...
+# Subtest: permission matrix has the approved 90 rules baseline
+ok 2 - permission matrix has the approved 90 rules baseline
+  ---
+  duration_ms: 3.626075
+  type: 'test'
+  ...
+# Subtest: state-machine transition baseline has 67 transitions
+ok 3 - state-machine transition baseline has 67 transitions
+  ---
+  duration_ms: 0.39717
+  type: 'test'
+  ...
+# Subtest: scoring test-vector baseline has 9 vectors
+ok 4 - scoring test-vector baseline has 9 vectors
+  ---
+  duration_ms: 0.161674
+  type: 'test'
+  ...
+# Subtest: Pilot v2 Prisma foundation includes current core entities
+ok 5 - Pilot v2 Prisma foundation includes current core entities
+  ---
+  duration_ms: 1.731177
+  type: 'test'
+  ...
+# Subtest: schema preserves core separation and version entities
+ok 6 - schema preserves core separation and version entities
+  ---
+  duration_ms: 0.413455
+  type: 'test'
+  ...
+# Subtest: Arabic RTL root layout is mandatory
+ok 7 - Arabic RTL root layout is mandatory
+  ---
+  duration_ms: 1.252113
+  type: 'test'
+  ...
+# Subtest: approved SAQL brand tokens are present
+ok 8 - approved SAQL brand tokens are present
+  ---
+  duration_ms: 0.340244
+  type: 'test'
+  ...
+# Subtest: Pilot v2 modules replace historical v1 modules
+ok 9 - Pilot v2 modules replace historical v1 modules
+  ---
+  duration_ms: 0.452264
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 110.306085
+
+## CI YAML structural parse
+CI YAML parse: OK
+
+## JS/MJS syntax
+JavaScript/MJS syntax: OK
+
+## File inventory
+Repository files: 90
+Approved visual references: 4
+
+## Not executed in this environment
+- npm dependency installation / lockfile generation
+- Prisma validate/generate/migrate/seed against PostgreSQL
+- TypeScript framework typecheck
+- ESLint with installed dependencies
+- Vitest framework suite
+- Next.js production build
+- Playwright browser test
+- Full GitHub CI run

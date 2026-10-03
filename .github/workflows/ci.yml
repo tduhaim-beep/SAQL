@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: saql
+          POSTGRES_PASSWORD: saql
+          POSTGRES_DB: saql_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U saql"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://saql:saql@localhost:5432/saql_test
+      APP_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Require lockfile
+        run: test -f package-lock.json
+      - run: npm run r0:env-check
+      - run: npm ci
+      - run: npm run db:validate
+      - run: npm run db:generate
+      - run: npm run db:assert-migration
+      - run: npm run db:deploy
+      - run: npm run db:seed
+      - run: npm run ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e

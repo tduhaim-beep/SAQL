@@ -1,0 +1,53 @@
+{
+  "name": "saql-pilot-v2",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:foundation:node": "node --test tests/foundation/*.test.mjs",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "foundation:verify": "node scripts/verify-repo.mjs && node scripts/check-control-pack.mjs && node scripts/check-state-schema-alignment.mjs && node scripts/check-architecture.mjs && node scripts/check-secrets.mjs && npm run test:foundation:node",
+    "ci": "npm run foundation:verify && npm run typecheck && npm run lint && npm run test && npm run build",
+    "check:state-schema": "node scripts/check-state-schema-alignment.mjs",
+    "db:assert-migration": "node scripts/check-migration-baseline.mjs",
+    "r0:env-check": "node scripts/check-r0-target-env.mjs --environment-only",
+    "r0:gate-check": "node scripts/check-r0-target-env.mjs && npm run foundation:verify"
+  },
+  "dependencies": {
+    "@prisma/client": "7.x",
+    "next": "16.x",
+    "react": "19.x",
+    "react-dom": "19.x",
+    "@fontsource/tajawal": "5.3.0",
+    "@prisma/adapter-pg": "7.x",
+    "pg": "8.x",
+    "dotenv": "17.x"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.x",
+    "@types/node": "24.x",
+    "@types/react": "19.x",
+    "@types/react-dom": "19.x",
+    "eslint": "9.x",
+    "eslint-config-next": "16.x",
+    "prisma": "7.x",
+    "typescript": "5.x",
+    "vitest": "5.x",
+    "tsx": "4.x"
+  },
+  "type": "module"
+}

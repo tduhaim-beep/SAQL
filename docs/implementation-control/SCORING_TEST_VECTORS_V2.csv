@@ -1,0 +1,10 @@
+﻿Vector ID,Method,Inputs,Expected Result,Explanation,Rule refs
+STV-001,Points,"earned=18,max=20",90.0,18/20×100,SCR-R03
+STV-002,Rating 1-5,"value=4.2,max=5",84.0,4.2/5×100,SCR-R05
+STV-003,Rubric,40%@90 + 30%@80 + 20%@100 + 10%@70,87.0,weighted sum,SCR-R06
+STV-004,Stage weighting,task A 40%@80 + task B 60%@90,86.0,32+54,SCR-R07/08
+STV-005,Final score,stage1 30%@80 + stage2 70%@90,87.0,24+63,SCR-R09
+STV-006,Threshold precision,"internal=69.96, threshold=70, display=70.0",FAIL,threshold uses unrounded score,SCR-R10/11
+STV-007,Missing required,required scored item missing,BLOCKED,no silent renormalization,SCR-R12
+STV-008,Resubmission,"attempt1=70, attempt2 accepted=85",85 current; 70 retained historically,latest accepted is current,SCR-R14
+STV-009,Plan version,closed score=88; template weights later changed,88 unchanged,historical score frozen,SCR-R16/18

@@ -1,0 +1,39 @@
+# R0 v2 Verification Evidence — CURRENT PLACEHOLDER
+
+Final R0 verification has NOT been executed after the Brand Identity v1.1 / Pre-R0 repository reconciliation patch.
+
+The previous dependency-free evidence was preserved as:
+`R0_V2_VERIFICATION_EVIDENCE_PRE_BRAND_V1_1_HISTORICAL.txt`
+
+Do not report R0 PASS or Brand/RTL PASS from the historical evidence.
+
+This file must be replaced/expanded during Final R0 in an approved target environment with:
+- Node.js 24 LTS
+- registry access and one committed lockfile
+- PostgreSQL
+- reviewed baseline migration + deploy
+- synthetic seed execution
+- typecheck / lint / Vitest / build
+- Playwright Desktop + mobile RTL checks
+- CI evidence
+- Brand Identity v1.1 asset/token/font verification
+- command results plus commit/release identifiers
+
+
+## Current Pre-R0 dependency-free check — 3 October 2026
+Command: `npm run foundation:verify`
+Patch environment: Node v22.16.0 (NOT the approved Final R0 runtime)
+Result: PASS — 14/14 Node-native foundation tests plus repository/control-pack/state-schema/TrainingException/architecture/secret checks.
+RG-R0-DATA-001: CLOSED / approved minimal `TrainingException` persistence baseline implemented.
+
+This remains Pre-R0 evidence only. It does not satisfy Node 24, registry/lockfile, Prisma validate/generate, PostgreSQL migration/seed, full Vitest/framework build, Playwright, or CI gates and must not be reported as R0 PASS.
+
+## Final R0 execution attempt — 3 October 2026
+Environment: Node v22.16.0 / npm 10.9.2.
+Target-environment check: BLOCKED — approved Node 24 LTS is not available here.
+Registry check: BLOCKED — registry.npmjs.org did not resolve in the current execution environment.
+PostgreSQL: BLOCKED — PostgreSQL runtime/service is not available here.
+Lockfile/migration: NOT GENERATED. No migration was hand-authored; Prisma-generated/reviewed baseline migration remains required in the target R0 environment.
+Repository Pre-R0 check immediately before packaging: `npm run foundation:verify` PASS — 14/14.
+Decision: Final R0 cannot be truthfully declared PASS or REWORK from this environment; execution remains environment-blocked.
+
