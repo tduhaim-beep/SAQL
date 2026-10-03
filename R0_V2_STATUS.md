@@ -1,11 +1,11 @@
-# R0 v2 current status — seed/security correction
+# R0 v2 current status — SEC-R0-DEP-001 compatibility
 
-**R0 REWORK — Business Coding HOLD; Slice1 not started.**
+**R0 PASS — Engineering verification. Business Coding HOLD; Slice1 not started.**
 
-Current candidate: seed TS2375 resolved via conditional object spread; strict TypeScript preserved. Typecheck, lint, Vitest7/7, production build and full npm run ci PASS; Foundation14/14. PostgreSQL16 disposable validate/generate/assert/deploy/synthetic seed and independent DB checks PASS. Desktop/Mobile Playwright2/2 and current Tajawal400/500/700 Brand/RTL PASS. Project Sources and approved implementation controls unchanged; RG-R0-DATA-001 CLOSED.
+Approved baseline `8486322fe89f899b22b3fae33e2f34155dab5316`; compatibility branch `final-r0/security-deepmerge-compat-20261004`. DeepmergeTS override7.1.5→8.0.2 verified with Prisma7.10.0 unchanged and MySQL2 override3.23.1 retained. Production audit3→0 High,0 Critical; SEC-R0-DEP-001 CLOSED. Full audit retains5 High dev-only entries with no compatible published patch; SEC-R0-DEV-002 OPEN separately under task§3, no production risk waiver.
 
-MySQL2 upgraded3.15.3→3.23.1 within major3 via scoped override. Production audit4→3 High (deepmerge-ts7.1.5 and propagated @prisma/config/prisma),0 Critical. SEC-R0-DEP-001 OPEN: fixed deepmerge-ts requires major8 outside this task; no force/downgrade/waiver. Full-tree audit8 High including unchanged dev-tool chain; SEC-R0-DEV-002 OPEN.
+Fresh local clean install, Prisma validate/generate/assert/deploy/synthetic seed and persisted-row/reseed checks PASS. Foundation14/14, strict typecheck, lint, Vitest7/7, build, npm run ci, Desktop/Mobile E2E2/2, actual Tajawal400/500/700 and Brand/RTL available foundation PASS. Controls/Sources/state/permission/scoring unchanged; RG-R0-DATA-001 remains CLOSED.
 
-Hosted CI: pending validation on exact candidate commit at documentation time; no Green run is claimed. The workflow now accepts final-r0/** pushes. Final Hosted status/commit/run logs are in the external correction-run delivery evidence, not inferred from local CI.
+Hosted CI [success](https://github.com/tduhaim-beep/SAQL/actions/runs/37162967163) is GREEN on technical candidate `d270ccaf5daa6e5169946b0354a88c1a1d39eb04`, including required Production dependency audit immediately after npm ci and full Playwright --with-deps. This documentation-only closure commit will receive its own Hosted run; the final external delivery report records the exact final SHA/run. Local non-root --with-deps exit1 is documented per the explicit user exception; actual Chromium/E2E and Hosted full installer pass.
 
-Current local report: R0_REWORK2_LOCAL_VERIFICATION_20261004.md. Security register: docs/security/R0_DEPENDENCY_SECURITY_GAPS_20261004.md. Earlier final reports are historical relative to this technical correction. OD-21 Final R0 PASS stays OPEN. No Business Coding authorization follows local success.
+Current report: R0_SEC_R0_DEP_001_COMPATIBILITY_VERIFICATION_20261004.md; security register: docs/security/R0_DEPENDENCY_SECURITY_GAPS_20261004.md. Older reports are historical. Project Sources and canonical OD-21 are untouched; engineering verification does not grant Business Coding or production-release approval.
