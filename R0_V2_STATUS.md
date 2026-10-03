@@ -1,48 +1,18 @@
-# R0 v2 — Repository Reconciliation & Verification Status
+# R0 v2 — Current Prisma7Compat Verification Status
 
-## Current position
-**PRE-R0 RECONCILIATION PATCH APPLIED / FINAL R0 NOT RUN / BUSINESS CODING HOLD**
+**R0 REWORK / BUSINESS CODING HOLD**
 
-This repository has been reconciled to current Project Sources at the file/scaffold level, including SAQL Brand Identity v1.1 and Stage 07/08/08A v2.1 references. This is not R0 PASS.
+Current input: SAQL_R0_v2_Codex_FinalR0_Handoff_Prisma7Compat_20261004.zip.
+SHA256: 3f0442cdd6d448202871418e2dd942fb26ab3bd5dda847635e6e3442299387ed.
 
-## Reconciled by this patch
-- Current Brand Identity v1.1 SVG assets added under `public/brand/`.
-- Old logo/token/public-site visual references moved to `docs/design/references/historical/`.
-- Current v1.1 logo reference images added under `docs/design/references/current/`.
-- CSS tokens changed to Ink/Blue/Canvas + approved supporting neutrals; Tajawal is the interface font baseline.
-- Superseded tagline removed from the foundation page.
-- `AGENTS.md`, Codex Start Here, brand baseline, current-baselines and control-pack README updated to current governance.
-- Prisma lifecycle enum names aligned with the current Implementation Control Pack state sets for Verification, Opportunity, Application, Training Journey, Plan Version, Plan Instance, Task, Alignment, Academic Overlay and Exception.
-- Academic Overlay lifecycle, participation mode and trust state are separated in the schema.
-- Vitest include pattern fixed; placeholder harness specs replaced with executable static contract tests.
-- Playwright now starts the app under test.
-- CI now explicitly requires a reviewed migration baseline before deploy.
-- Historical pre-Brand-v1.1 verification evidence preserved and no longer presented as current evidence.
+Clean Node24.19.0/npm11.9.0 install succeeded. One reviewed npm lockfile committed before npm ci. PostgreSQL16.15 disposable only, no prior data/results.
 
-## Deliberately unresolved / R0 blockers
-- Current execution environment is Node 22, not approved Node 24.
-- Registry access is unavailable here; dependencies and `package-lock.json` cannot be generated/verified.
-- No reviewed `prisma/migrations/*/migration.sql` exists yet; the material Exceptions data-model gap is now closed, so migration generation may proceed in the target R0 environment.
-- `RG-R0-DATA-001` is closed: the approved minimal `TrainingException` persistence baseline is implemented and documented; no closed type/severity taxonomy was invented.
-- Tajawal binaries are not duplicated in this repository artifact; Final R0 must verify provisioning/loading from the canonical Brand Identity package in the target environment.
-- Prisma validate/generate, PostgreSQL migration/seed, TypeScript, ESLint, Vitest, Next build, Playwright and full CI remain to be executed in the target environment.
+PASS: Prisma7.10.0 validate/generate; tool-generated/reviewed initial v2 migration (20tables/17enums/32indexes/33FKs), migration assertion/deployment, actual synthetic seed rows (1Institution/1Organization/6AppUser/6RoleAssignment), logical repeat seed and DB enum/checksum verification. Foundation14/14, Vitest7/7, lint, Playwright2/2 and current available Brand/RTL/Tajawal400/500/700 evidence PASS. Control8/8 SHA256 matches canonical sources; RG-R0-DATA-001 CLOSED.
 
-## Current dependency-free verification
-On 3 October 2026, after closing `RG-R0-DATA-001`, `npm run foundation:verify` passed 14/14 Node-native foundation tests plus repository/control-pack/state-schema/TrainingException/architecture/secret checks in Node 22. This is Pre-R0 evidence only and is not Final R0 PASS.
+FAIL: TypeScript TS2375 in prisma/seed.ts roleAssignment.create data: optional org/institution fields explicitly undefined under exactOptionalPropertyTypes. Build compiles app then fails typecheck; npm run ci fails at same check. The runtime seed PASS does not imply strict TS PASS.
 
-## Final R0 execution preparation — 3 October 2026
-- `R0_FINAL_RUNBOOK.md` now defines the exact Node 24 + registry + PostgreSQL execution sequence and evidence requirements.
-- `scripts/check-r0-target-env.mjs` provides an executable environment/gate preflight.
-- `R0_FINAL_EXECUTION_BLOCKER_REPORT.md` records why this current container cannot generate valid lockfile/Prisma migration/DB evidence.
-- CI now runs the target environment check and explicit `prisma validate` before generate/deploy gates.
+Security: audit9high affected entries full tree,4high omit=dev,0critical; no reachability waiver or forced major downgrade. Exact Playwright --with-deps installer failed non-root su; browser-only install and actual browser/E2E pass with existing libraries. Hosted workflow not run; local engineering CI fails. Production build is not ready.
 
-## Gate position
-Final R0 must return **R0 PASS** or **R0 REWORK** with actual execution evidence. Do not begin Business Slice 1 until R0 PASS.
+Only lockfile, Prisma-generated migration files and verification documentation/evidence changed; no seed/schema/application/test/control/source-document correction. Next automatic agent/config changes restored, strict flags retained. No hand-authored migration or Business Feature. No new business Requirement Gap; OD-21 remains open.
 
-## Prisma 7 compatibility patch — 4 October 2026
-- `schema.prisma` now uses Prisma 7-compatible multiline enums and keeps the datasource URL out of the schema.
-- `prisma.config.ts` is the CLI source for `DATABASE_URL`, migration path, and the synthetic seed command.
-- Prisma Client generation now uses the Prisma 7 `prisma-client` generator with explicit output under `src/generated/prisma`.
-- Runtime DB access for the seed uses `@prisma/adapter-pg` + `pg`; the seed fails loudly if `DATABASE_URL` is absent and prints a completion marker only after real writes finish.
-- No migration was hand-authored by this patch. Final R0 must regenerate the lockfile, run Prisma validate/generate, create/review the baseline migration, apply it to disposable PostgreSQL, verify persisted seed rows, and rerun the full gate suite.
-- Project Sources and business rules were not changed by this compatibility patch.
+See R0_V2_VERIFICATION_EVIDENCE.txt, R0_FINAL_PRISMA7_VERIFICATION_20261004.md and R0_PRISMA7_BASELINE_MIGRATION_REVIEW_20261004.md. Delivery contains raw logs, SQL, seed snapshots, images, hashes, changed-files diff and local Git bundle. Environment install/start saved as a draft; publication/restoration not claimed.

@@ -1,39 +1,794 @@
-# R0 v2 Verification Evidence — CURRENT PLACEHOLDER
+SAQL CURRENT PRISMA7COMPAT FINAL R0 EVIDENCE
+Outcome R0 REWORK. Business Coding HOLD. No Business Feature/Slice started.
 
-Final R0 verification has NOT been executed after the Brand Identity v1.1 / Pre-R0 repository reconciliation patch.
+{
+  "outcome": "R0 REWORK",
+  "runtime": {
+    "node": "24.19.0",
+    "npm": "11.9.0",
+    "postgresql": "16.15",
+    "prisma": "7.10.0",
+    "docker": "28.4.0",
+    "chromium": "153.0.8010.12",
+    "python": "3.12.14",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "utc": "2026-10-03T22:43:45.091687+00:00",
+    "riyadh": "2026-10-04T01:43:45.091687+03:00"
+  },
+  "inputs": [
+    {
+      "file": "1-SAQL_R0_v2_Codex_FinalR0_Handoff_Prisma7Compat_20261004.zip",
+      "sha256": "3f0442cdd6d448202871418e2dd942fb26ab3bd5dda847635e6e3442299387ed",
+      "bytes": 3464225
+    },
+    {
+      "file": "SAQL_Codex_Current_Project_Sources_v1.zip",
+      "sha256": "65fde354a192e1fd2de0942280cf51a59c28c2da3f25643c34a6b24ed4404f5b",
+      "bytes": 3348369
+    }
+  ],
+  "lock": {
+    "lockfile_version": 3,
+    "versions": {
+      "next": "16.3.8",
+      "react": "19.3.0",
+      "prisma": "7.10.0",
+      "@prisma/client": "7.10.0",
+      "@prisma/adapter-pg": "7.10.0",
+      "pg": "8.23.1",
+      "dotenv": "17.4.2",
+      "tsx": "4.23.15",
+      "vitest": "5.0.3",
+      "@playwright/test": "1.63.0",
+      "typescript": "5.9.3",
+      "@fontsource/tajawal": "5.3.0",
+      "eslint": "9.39.5"
+    },
+    "package_entries": 630,
+    "all_integrity_present": true,
+    "registry_hosts": [
+      "registry.npmjs.org"
+    ],
+    "one_package_manager": true,
+    "prisma_cli_client_adapter_versions_aligned": true,
+    "licenses": {
+      "@prisma/adapter-pg": "Apache-2.0",
+      "pg": "MIT",
+      "dotenv": "BSD-2-Clause",
+      "tsx": "MIT",
+      "@fontsource/tajawal": "OFL-1.1"
+    },
+    "manifest_unchanged_by_verification": true,
+    "sha256": "ca5b09ccedec3e5ae07ffed65c6ffbd2f66a2074692f55cc86cb84fab3008060"
+  },
+  "baseline_commit": "7d2013c560c2d38f472d367d2f94e90c829b21b8",
+  "reviewed_lock_commit": "18fa7bc8d9668dde972ee21c930b40c7834fae98",
+  "reviewed_migration_commit": "d46ac3d5ec8261e32f65a39bef9c699d31218b21",
+  "migration": {
+    "result": "PASS",
+    "review_utc": "2026-10-03T22:30:17.422828+00:00",
+    "path": "prisma/migrations/20261003222856_r0_v2_baseline/migration.sql",
+    "sql_sha256": "63c247991bff9ab2dd4445bbcac58cc56047a821963ca323e5def7176e1fc9b2",
+    "schema_sha256": "9a8eeae1a532c8385e412b7e76e03b05b9928718c225ab94f2b6d87c4b9b0114",
+    "tables": 20,
+    "enums": 17,
+    "indexes": 32,
+    "foreign_keys": 33,
+    "checks": {
+      "model_set_matches_current_schema": true,
+      "all_enum_values_match_current_schema": true,
+      "only_additive_initial_ddl": true,
+      "no_drop_truncate_delete_update_insert": true,
+      "TrainingException_present": true,
+      "type_severity_open_TEXT": true,
+      "current_exception_lifecycle": true,
+      "exception_journey_preserves_history": true,
+      "exception_context_owner_resolver_SET_NULL": true
+    },
+    "review_findings": [
+      "All 20 table names/17 enum sets match current v2 supplied schema, no v1 resurrection",
+      "All ALTER TABLE statements add reviewed foreign keys to new tables; no destructive data commands",
+      "Existing cascade/set-null/restrict policies copied from supplied schema; none changed in this task",
+      "TrainingException type/severity remain open TEXT; approved lifecycle is present, journey RESTRICT and optional context/actors SET NULL preserve exception history",
+      "Fresh DB has no business tables and no migration entries after create-only; shadow database creation did not deploy business schema",
+      "Cross-record overlay/journey invariant is explicitly deferred to the authorized Exceptions slice; no business code added"
+    ],
+    "human_production_approval": "Not applicable: user expressly authorized creation/review/application on disposable database; no production operation",
+    "sql_hand_authored_or_edited": false
+  },
+  "gates": [
+    {
+      "gate": "Node24/npm/PostgreSQL",
+      "status": "PASS",
+      "detail": "Node24.19.0; npm11.9.0; PostgreSQL16.15; fresh database initially zero public tables",
+      "evidence": "A01-node.log, A02-npm.log, A03-env.log, postgres-version-before.log"
+    },
+    {
+      "gate": "Clean install / reviewed lockfile",
+      "status": "PASS",
+      "detail": "530 packages installed; 630 locked entries; all integrity present; committed before npm ci; approved majors unchanged",
+      "evidence": "A04-lock.log, A05-lock-review.json, A06-clean-install.log"
+    },
+    {
+      "gate": "Prisma validate",
+      "status": "PASS",
+      "detail": "Current schema accepted by Prisma7.10.0",
+      "evidence": "B01-validate.log"
+    },
+    {
+      "gate": "Prisma generate",
+      "status": "PASS",
+      "detail": "Real Prisma7 client generated at src/generated/prisma",
+      "evidence": "B02-generate.log, generated-prisma-sha256.json"
+    },
+    {
+      "gate": "Baseline create-only",
+      "status": "PASS",
+      "detail": "Created by Prisma only, not applied before review, SQL never edited",
+      "evidence": "B03-create-migration.log, B04-db-before-deploy.log"
+    },
+    {
+      "gate": "Migration SQL review",
+      "status": "PASS",
+      "detail": "20 tables,17 enums,32 indexes,33 foreign keys; v2 model/state sets match; no destructive DML/DDL; open type/severity TEXT",
+      "evidence": "B05-migration-review.json, generated-migration.sql"
+    },
+    {
+      "gate": "Migration assertion/deployment",
+      "status": "PASS",
+      "detail": "Reviewed SQL committed before apply; one migration deployed",
+      "evidence": "B06-assert-migration.log, B07-deploy.log"
+    },
+    {
+      "gate": "Persisted synthetic seed",
+      "status": "PASS",
+      "detail": "1 Institution,1 Organization,6 AppUser,6 RoleAssignment; roles/context and migration checksum verified from DB",
+      "evidence": "B08-seed.log, B09-verify-seed.log, seed-first.json"
+    },
+    {
+      "gate": "Seed repeatability",
+      "status": "PASS",
+      "detail": "Second run preserves logical counts, actors/contexts and user/entity IDs; assignment IDs intentionally recreated by input seed",
+      "evidence": "B10-seed-repeat.log, B11-verify-repeat.log, seed-repeat.json"
+    },
+    {
+      "gate": "Foundation/architecture/basic secrets",
+      "status": "PASS",
+      "detail": "14/14 Node-native tests; current controls/state/exception/structure/architecture/basic-secret guards pass",
+      "evidence": "C01-foundation.log"
+    },
+    {
+      "gate": "TypeScript",
+      "status": "FAIL",
+      "detail": "TS2375 at prisma/seed.ts:63; explicit undefined for optional org/institution fields conflicts with exactOptionalPropertyTypes",
+      "evidence": "C02-typecheck.log"
+    },
+    {
+      "gate": "Lint",
+      "status": "PASS",
+      "detail": "ESLint exit0",
+      "evidence": "C03-lint.log"
+    },
+    {
+      "gate": "Vitest",
+      "status": "PASS",
+      "detail": "7/7 tests in4 files; zero failures and no E2E discovery",
+      "evidence": "C04-test.log"
+    },
+    {
+      "gate": "Production build",
+      "status": "FAIL",
+      "detail": "Compiled application successfully; failed mandatory TypeScript check on seed TS2375",
+      "evidence": "C05-build.log"
+    },
+    {
+      "gate": "npm run ci",
+      "status": "FAIL",
+      "detail": "Foundation passed; chain stopped at typecheck exit2; later chain stages not executed in this command",
+      "evidence": "C06-ci.log"
+    },
+    {
+      "gate": "Playwright exact --with-deps installer",
+      "status": "FAIL / ENVIRONMENT",
+      "detail": "Non-root su authentication failed; command exit1",
+      "evidence": "C07-playwright-with-deps.log"
+    },
+    {
+      "gate": "Chromium-only installation / browser launch",
+      "status": "PASS",
+      "detail": "Supported browser-only installation and actual launch work with existing OS libraries",
+      "evidence": "C07b-chromium-only.log, D01-brand-runtime.log"
+    },
+    {
+      "gate": "Playwright E2E",
+      "status": "PASS",
+      "detail": "2/2 foundation cases desktop/mobile, own server CI=1",
+      "evidence": "C08-e2e.log"
+    },
+    {
+      "gate": "Brand v1.1 / RTL available foundation",
+      "status": "PASS",
+      "detail": "6 font requests HTTP200 per viewport; actual Tajawal Regular/Medium/Bold rendered at400/500/700; palette/logos exact; no horizontal overflow",
+      "evidence": "brand-runtime.json, font-provenance.json, brand-desktop.png, brand-mobile.png"
+    },
+    {
+      "gate": "Implementation-control SHA256",
+      "status": "PASS",
+      "detail": "All8 independent canonical hashes and source files match; no controls changed",
+      "evidence": "canonical-comparison.json"
+    },
+    {
+      "gate": "Dependency audit",
+      "status": "FAIL / FINDINGS",
+      "detail": "9 high affected package entries full tree;4 high omit=dev;0 critical; no proven reachability or risk waiver",
+      "evidence": "audit-full.json, audit-production.json, security-summary.json"
+    },
+    {
+      "gate": "Full hosted workflow",
+      "status": "NOT RUN / LOCAL GATES FAIL",
+      "detail": "DB steps now pass locally, but local CI typecheck/build fail; no remote push/Actions execution",
+      "evidence": "C06-ci.log, .github/workflows/ci.yml"
+    }
+  ],
+  "commands": [
+    {
+      "label": "docker-info",
+      "command": [
+        "env",
+        "-u",
+        "DOCKER_HOST",
+        "-u",
+        "DOCKER_CONTEXT",
+        "-u",
+        "DOCKER_TLS",
+        "-u",
+        "DOCKER_TLS_VERIFY",
+        "-u",
+        "DOCKER_CERT_PATH",
+        "docker",
+        "--host=unix:///var/run/docker.sock",
+        "info",
+        "--format",
+        "{{.ServerVersion}}"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:27:23.184180+00:00",
+      "duration_seconds": 0.069,
+      "exit_code": 0,
+      "log": "docker-info.log",
+      "CI": null
+    },
+    {
+      "label": "postgres-start",
+      "command": [
+        "env",
+        "-u",
+        "DOCKER_HOST",
+        "-u",
+        "DOCKER_CONTEXT",
+        "-u",
+        "DOCKER_TLS",
+        "-u",
+        "DOCKER_TLS_VERIFY",
+        "-u",
+        "DOCKER_CERT_PATH",
+        "docker",
+        "--host=unix:///var/run/docker.sock",
+        "run",
+        "-d",
+        "--name",
+        "saql-prisma7-r0-wbzp4fnf-postgres",
+        "--label",
+        "saql.purpose=prisma7-final-r0",
+        "--tmpfs",
+        "/var/lib/postgresql/data:rw,size=512m",
+        "-e",
+        "POSTGRES_USER=saql",
+        "-e",
+        "POSTGRES_PASSWORD=saql",
+        "-e",
+        "POSTGRES_DB=saql_prisma7_r0",
+        "-p",
+        "127.0.0.1:55434:5432",
+        "postgres:16"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:27:23.280479+00:00",
+      "duration_seconds": 3.145,
+      "exit_code": 0,
+      "log": "postgres-start.log",
+      "CI": null
+    },
+    {
+      "label": "A01-node",
+      "command": [
+        "node",
+        "-v"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:27:44.464681+00:00",
+      "duration_seconds": 0.007,
+      "exit_code": 0,
+      "log": "A01-node.log",
+      "CI": null
+    },
+    {
+      "label": "A02-npm",
+      "command": [
+        "npm",
+        "-v"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:27:44.501852+00:00",
+      "duration_seconds": 0.083,
+      "exit_code": 0,
+      "log": "A02-npm.log",
+      "CI": null
+    },
+    {
+      "label": "A03-env",
+      "command": [
+        "npm",
+        "run",
+        "r0:env-check"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:27:44.616499+00:00",
+      "duration_seconds": 0.147,
+      "exit_code": 0,
+      "log": "A03-env.log",
+      "CI": null
+    },
+    {
+      "label": "postgres-version-before",
+      "command": [
+        "env",
+        "-u",
+        "DOCKER_HOST",
+        "-u",
+        "DOCKER_CONTEXT",
+        "-u",
+        "DOCKER_TLS",
+        "-u",
+        "DOCKER_TLS_VERIFY",
+        "-u",
+        "DOCKER_CERT_PATH",
+        "docker",
+        "--host=unix:///var/run/docker.sock",
+        "exec",
+        "saql-prisma7-r0-wbzp4fnf-postgres",
+        "psql",
+        "-U",
+        "saql",
+        "-d",
+        "saql_prisma7_r0",
+        "-c",
+        "SELECT version(); SELECT count(*) AS public_tables FROM information_schema.tables WHERE table_schema='public';"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:27:46.009947+00:00",
+      "duration_seconds": 0.103,
+      "exit_code": 0,
+      "log": "postgres-version-before.log",
+      "CI": null
+    },
+    {
+      "label": "A04-lock",
+      "command": [
+        "npm",
+        "install",
+        "--package-lock-only"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:27:44.798895+00:00",
+      "duration_seconds": 21.181,
+      "exit_code": 0,
+      "log": "A04-lock.log",
+      "CI": null
+    },
+    {
+      "label": "A06-clean-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:28:19.680517+00:00",
+      "duration_seconds": 9.878,
+      "exit_code": 0,
+      "log": "A06-clean-install.log",
+      "CI": null
+    },
+    {
+      "label": "B01-validate",
+      "command": [
+        "npm",
+        "run",
+        "db:validate"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:28:53.079827+00:00",
+      "duration_seconds": 0.978,
+      "exit_code": 0,
+      "log": "B01-validate.log",
+      "CI": null
+    },
+    {
+      "label": "B02-generate",
+      "command": [
+        "npm",
+        "run",
+        "db:generate"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:28:54.084720+00:00",
+      "duration_seconds": 1.033,
+      "exit_code": 0,
+      "log": "B02-generate.log",
+      "CI": null
+    },
+    {
+      "label": "B03-create-migration",
+      "command": [
+        "npx",
+        "prisma",
+        "migrate",
+        "dev",
+        "--name",
+        "r0_v2_baseline",
+        "--create-only"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:28:55.144416+00:00",
+      "duration_seconds": 1.075,
+      "exit_code": 0,
+      "log": "B03-create-migration.log",
+      "CI": null
+    },
+    {
+      "label": "security-audit-production",
+      "command": [
+        "npm",
+        "audit",
+        "--omit=dev",
+        "--json"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:29:05.410864+00:00",
+      "duration_seconds": 2.109,
+      "exit_code": 1,
+      "log": "security-audit-production.log",
+      "CI": null
+    },
+    {
+      "label": "security-audit-full",
+      "command": [
+        "npm",
+        "audit",
+        "--json"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:29:05.411796+00:00",
+      "duration_seconds": 2.437,
+      "exit_code": 1,
+      "log": "security-audit-full.log",
+      "CI": null
+    },
+    {
+      "label": "B04-db-before-deploy",
+      "command": [
+        "env",
+        "-u",
+        "DOCKER_HOST",
+        "-u",
+        "DOCKER_CONTEXT",
+        "-u",
+        "DOCKER_TLS",
+        "-u",
+        "DOCKER_TLS_VERIFY",
+        "-u",
+        "DOCKER_CERT_PATH",
+        "docker",
+        "--host=unix:///var/run/docker.sock",
+        "exec",
+        "saql-prisma7-r0-wbzp4fnf-postgres",
+        "psql",
+        "-U",
+        "saql",
+        "-d",
+        "saql_prisma7_r0",
+        "-c",
+        "SELECT tablename FROM pg_tables WHERE schemaname='public'; SELECT migration_name, finished_at FROM _prisma_migrations;"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:29:19.726081+00:00",
+      "duration_seconds": 0.085,
+      "exit_code": 0,
+      "log": "B04-db-before-deploy.log",
+      "CI": null
+    },
+    {
+      "label": "B06-assert-migration",
+      "command": [
+        "npm",
+        "run",
+        "db:assert-migration"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:30:17.467531+00:00",
+      "duration_seconds": 0.138,
+      "exit_code": 0,
+      "log": "B06-assert-migration.log",
+      "CI": null
+    },
+    {
+      "label": "B07-deploy",
+      "command": [
+        "npm",
+        "run",
+        "db:deploy"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:30:17.664025+00:00",
+      "duration_seconds": 0.893,
+      "exit_code": 0,
+      "log": "B07-deploy.log",
+      "CI": null
+    },
+    {
+      "label": "B08-seed",
+      "command": [
+        "npm",
+        "run",
+        "db:seed"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:30:18.583673+00:00",
+      "duration_seconds": 1.212,
+      "exit_code": 0,
+      "log": "B08-seed.log",
+      "CI": null
+    },
+    {
+      "label": "B09-verify-seed",
+      "command": [
+        "python",
+        "/workspace/saql-prisma7-final-r0-wbzp4fnf/verify_db.py",
+        "seed-first.json"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:31:23.442285+00:00",
+      "duration_seconds": 0.119,
+      "exit_code": 0,
+      "log": "B09-verify-seed.log",
+      "CI": null
+    },
+    {
+      "label": "B10-seed-repeat",
+      "command": [
+        "npm",
+        "run",
+        "db:seed"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:31:23.590711+00:00",
+      "duration_seconds": 1.174,
+      "exit_code": 0,
+      "log": "B10-seed-repeat.log",
+      "CI": null
+    },
+    {
+      "label": "B11-verify-repeat",
+      "command": [
+        "python",
+        "/workspace/saql-prisma7-final-r0-wbzp4fnf/verify_db.py",
+        "seed-repeat.json"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:31:24.790271+00:00",
+      "duration_seconds": 0.113,
+      "exit_code": 0,
+      "log": "B11-verify-repeat.log",
+      "CI": null
+    },
+    {
+      "label": "C01-foundation",
+      "command": [
+        "npm",
+        "run",
+        "foundation:verify"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:31:51.212051+00:00",
+      "duration_seconds": 0.508,
+      "exit_code": 0,
+      "log": "C01-foundation.log",
+      "CI": null
+    },
+    {
+      "label": "C02-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:31:51.747233+00:00",
+      "duration_seconds": 2.078,
+      "exit_code": 2,
+      "log": "C02-typecheck.log",
+      "CI": null
+    },
+    {
+      "label": "C03-lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:31:53.855258+00:00",
+      "duration_seconds": 3.75,
+      "exit_code": 0,
+      "log": "C03-lint.log",
+      "CI": null
+    },
+    {
+      "label": "C04-test",
+      "command": [
+        "npm",
+        "run",
+        "test"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:31:57.632570+00:00",
+      "duration_seconds": 0.667,
+      "exit_code": 0,
+      "log": "C04-test.log",
+      "CI": null
+    },
+    {
+      "label": "C05-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:31:58.327517+00:00",
+      "duration_seconds": 5.795,
+      "exit_code": 1,
+      "log": "C05-build.log",
+      "CI": null
+    },
+    {
+      "label": "C06-ci",
+      "command": [
+        "npm",
+        "run",
+        "ci"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:33:36.377955+00:00",
+      "duration_seconds": 2.784,
+      "exit_code": 2,
+      "log": "C06-ci.log",
+      "CI": null
+    },
+    {
+      "label": "C07-playwright-with-deps",
+      "command": [
+        "npx",
+        "playwright",
+        "install",
+        "--with-deps",
+        "chromium"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:33:39.187742+00:00",
+      "duration_seconds": 1.608,
+      "exit_code": 1,
+      "log": "C07-playwright-with-deps.log",
+      "CI": null
+    },
+    {
+      "label": "C07b-chromium-only",
+      "command": [
+        "npx",
+        "playwright",
+        "install",
+        "chromium"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:33:40.823089+00:00",
+      "duration_seconds": 0.656,
+      "exit_code": 0,
+      "log": "C07b-chromium-only.log",
+      "CI": null
+    },
+    {
+      "label": "C08-e2e",
+      "command": [
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:33:41.511764+00:00",
+      "duration_seconds": 3.881,
+      "exit_code": 0,
+      "log": "C08-e2e.log",
+      "CI": "1"
+    },
+    {
+      "label": "D01-brand-runtime",
+      "command": [
+        "node",
+        "/workspace/saql-prisma7-final-r0-wbzp4fnf/brand_probe.cjs"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:33:45.422745+00:00",
+      "duration_seconds": 4.93,
+      "exit_code": 0,
+      "log": "D01-brand-runtime.log",
+      "CI": null
+    },
+    {
+      "label": "cleanup-postgres",
+      "command": [
+        "env",
+        "-u",
+        "DOCKER_HOST",
+        "-u",
+        "DOCKER_CONTEXT",
+        "-u",
+        "DOCKER_TLS",
+        "-u",
+        "DOCKER_TLS_VERIFY",
+        "-u",
+        "DOCKER_CERT_PATH",
+        "docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "-f",
+        "saql-prisma7-r0-wbzp4fnf-postgres"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:37:18.874335+00:00",
+      "duration_seconds": 0.318,
+      "exit_code": 0,
+      "log": "cleanup-postgres.log",
+      "CI": null
+    },
+    {
+      "label": "delivery-secret-check",
+      "command": [
+        "node",
+        "scripts/check-secrets.mjs"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:40:39.576824+00:00",
+      "duration_seconds": 0.086,
+      "exit_code": 0,
+      "log": "delivery-secret-check.log",
+      "CI": null
+    },
+    {
+      "label": "delivery-diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/workspace/saql-prisma7-final-r0-wbzp4fnf/repository",
+      "start_utc": "2026-10-03T22:40:39.695484+00:00",
+      "duration_seconds": 0.003,
+      "exit_code": 0,
+      "log": "delivery-diff-check.log",
+      "CI": null
+    }
+  ]
+}
 
-The previous dependency-free evidence was preserved as:
-`R0_V2_VERIFICATION_EVIDENCE_PRE_BRAND_V1_1_HISTORICAL.txt`
-
-Do not report R0 PASS or Brand/RTL PASS from the historical evidence.
-
-This file must be replaced/expanded during Final R0 in an approved target environment with:
-- Node.js 24 LTS
-- registry access and one committed lockfile
-- PostgreSQL
-- reviewed baseline migration + deploy
-- synthetic seed execution
-- typecheck / lint / Vitest / build
-- Playwright Desktop + mobile RTL checks
-- CI evidence
-- Brand Identity v1.1 asset/token/font verification
-- command results plus commit/release identifiers
-
-
-## Current Pre-R0 dependency-free check — 3 October 2026
-Command: `npm run foundation:verify`
-Patch environment: Node v22.16.0 (NOT the approved Final R0 runtime)
-Result: PASS — 14/14 Node-native foundation tests plus repository/control-pack/state-schema/TrainingException/architecture/secret checks.
-RG-R0-DATA-001: CLOSED / approved minimal `TrainingException` persistence baseline implemented.
-
-This remains Pre-R0 evidence only. It does not satisfy Node 24, registry/lockfile, Prisma validate/generate, PostgreSQL migration/seed, full Vitest/framework build, Playwright, or CI gates and must not be reported as R0 PASS.
-
-## Final R0 execution attempt — 3 October 2026
-Environment: Node v22.16.0 / npm 10.9.2.
-Target-environment check: BLOCKED — approved Node 24 LTS is not available here.
-Registry check: BLOCKED — registry.npmjs.org did not resolve in the current execution environment.
-PostgreSQL: BLOCKED — PostgreSQL runtime/service is not available here.
-Lockfile/migration: NOT GENERATED. No migration was hand-authored; Prisma-generated/reviewed baseline migration remains required in the target R0 environment.
-Repository Pre-R0 check immediately before packaging: `npm run foundation:verify` PASS — 14/14.
-Decision: Final R0 cannot be truthfully declared PASS or REWORK from this environment; execution remains environment-blocked.
-
+Persisted seed1Institution/1Organization/6users/6assignments; repeat logical snapshots and actual17DB enum sets/migration checksum verified. TS2375 seed optional undefined blocks typecheck/build/CI. Seed transpilation runtime works but strict TS fails. No SQL hand authoring or source changes. Basic secret/architecture guards pass; audit9high full/4high omit=dev,0critical, reachability not waived. Brand/RTL actual available foundation desktop/mobile/font checks pass; semantic status components absent/NOT EXERCISED; historical08B not used. Exact --with-deps failed root privilege; actual browser-only install/E2E pass. Hosted CI not executed. Source references23 unchanged. No new business gaps; RG-R0-DATA-001 CLOSED, OD-21 OPEN.
+Final commit/changed files/checksums in evidence/release.json and changed-files.json; local-only commits, no remote push. All raw logs/screenshots/JSON/diff/SQL/client-generation evidence in delivery.
