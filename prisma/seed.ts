@@ -63,8 +63,8 @@ async function main() {
       data: {
         userId: user.id,
         role: item.role,
-        organizationId: item.organizationId,
-        institutionId: item.institutionId,
+        ...(item.organizationId !== undefined ? { organizationId: item.organizationId } : {}),
+        ...(item.institutionId !== undefined ? { institutionId: item.institutionId } : {}),
       },
     });
   }
