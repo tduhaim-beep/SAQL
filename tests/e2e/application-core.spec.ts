@@ -47,12 +47,14 @@ async function brandEvidence(page: Page, info: TestInfo, screen: string) {
   expect(metrics.dir).toBe("rtl"); expect(metrics.fontFamily).toContain("Tajawal");
   expect(metrics.rendered.every((f) => f.loaded)).toBe(true); expect(metrics.overflow).toBe(false);
   expect(metrics.ink).toBe("#142f43"); expect(metrics.blue).toBe("#2f5bea");
-  await page.evaluate(() => {
+  await page.evaluate(async () => {
     for (const weight of [400, 500, 700]) {
       const node = document.createElement("span"); node.id = `font-probe-${weight}`; node.textContent = "صقل تدريب";
       node.style.cssText = `font-family:Tajawal;font-weight:${weight};position:fixed;inset-inline-start:-1000px;`;
       document.body.appendChild(node);
+      node.getBoundingClientRect();
     }
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
   });
   const cdp = await page.context().newCDPSession(page);
   await cdp.send("DOM.enable"); await cdp.send("CSS.enable");
@@ -60,8 +62,11 @@ async function brandEvidence(page: Page, info: TestInfo, screen: string) {
   const fonts = [];
   for (const weight of [400, 500, 700]) {
     const { nodeId } = await cdp.send("DOM.querySelector", { nodeId: root.nodeId, selector: `#font-probe-${weight}` });
-    const result = await cdp.send("CSS.getPlatformFontsForNode", { nodeId });
-    expect(result.fonts.some((font) => font.isCustomFont && font.familyName.includes("Tajawal") && font.glyphCount > 0)).toBe(true);
+    let result = await cdp.send("CSS.getPlatformFontsForNode", { nodeId });
+    await expect.poll(async () => {
+      result = await cdp.send("CSS.getPlatformFontsForNode", { nodeId });
+      return result.fonts.some((font) => font.isCustomFont && font.familyName.includes("Tajawal") && font.glyphCount > 0);
+    }, { timeout: 5000, message: `Actual Tajawal rendering for weight ${weight} after layout` }).toBe(true);
     fonts.push({ weight, fonts: result.fonts });
   }
   await cdp.detach();
