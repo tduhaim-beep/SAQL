@@ -15,7 +15,7 @@ export default function HomePage() {
         <p className="eyebrow">R0 v2 — Pre-R0 Reconciliation</p>
         <h1 id="foundation-title">الأساس الهندسي</h1>
         <p className="body-copy">
-          تمت مواءمة الأساس مع Pilot v2.0 وهوية SAQL Brand Identity v1.1. لم تبدأ خصائص الأعمال بعد.
+          تمت مواءمة الأساس مع Pilot v2.0 وهوية SAQL Brand Identity v1.1. أصبح مسار الطلبات الأول قيد التحقق.
         </p>
       </section>
     </main>
