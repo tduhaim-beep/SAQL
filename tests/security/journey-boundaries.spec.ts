@@ -1,8 +1,12 @@
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 describe("S2 command and architecture boundaries", () => {
+  it("E2E evidence wrapper preserves a real runner failure exit status", () => {
+    const failed = spawnSync(process.execPath, ["scripts/run-e2e.mjs", "--unsupported-saql-option"], { encoding: "utf8" });
+    expect(failed.status).toBe(1); expect(failed.stderr).toContain("unknown option");
+  });
   it("NEG-S2-07 verifies presentation/domain import guards", () => {
     expect(execFileSync(process.execPath, ["scripts/check-architecture.mjs"], { encoding: "utf8" })).toContain("Architecture import guard: OK");
   });

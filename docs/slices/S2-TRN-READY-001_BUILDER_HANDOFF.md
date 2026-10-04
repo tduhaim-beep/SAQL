@@ -31,6 +31,8 @@ Prisma query extensions inject failures only in tests. Their generated client ov
 
 Required candidate gates: clean npm ci; production audit; Prisma validate/generate/baseline assertion/deploy/seed; foundation:verify; typecheck; lint; Vitest; build; npm run ci; both persisted-data evidence scripts; actual production test-actor guard; Playwright Desktop/Mobile; Hosted CI GREEN on exact final SHA.
 
+The E2E wrapper preserves the runner's exit status and redacts the ephemeral test identity token from the JSON configuration before evidence/artifact delivery. Redaction failure fails the command. The test harness identity remains unavailable in production; its token is never a product credential.
+
 ## Canonical reconciliation / next-stage boundary
 State/permission/scoring controls and Project Sources remain untouched. The pack's accepted G8 Slice01 traceability implementation/control statuses are newer than the repository mirror; all 225 requirement semantics agree. Read the pack as current; no G3 canonical status update. `S2-TRN-READY-001_TRACEABILITY_DELTA_PROPOSAL.csv` is a proposal only, conditional on independent review, triggered Security and Founder Closeout.
 
