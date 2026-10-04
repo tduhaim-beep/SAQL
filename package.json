@@ -14,6 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:production-actor-guard": "node tests/support/production-actor-guard.mjs",
+    "test:slice01:db-evidence": "tsx tests/support/capture-slice01-db.ts",
     "test:foundation:node": "node --test tests/foundation/*.test.mjs",
     "db:generate": "prisma generate",
     "db:validate": "prisma validate",

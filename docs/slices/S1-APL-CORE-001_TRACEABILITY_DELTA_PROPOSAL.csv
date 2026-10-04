@@ -1,0 +1,13 @@
+Requirement ID,Proposed status,Implemented bounded scope,Acceptance evidence,Remaining scope,Governance state
+BR-PUB-002,PARTIALLY IMPLEMENTED,Published fixture read only,AC-S1-01 and AC-S1-09,Public opportunity network and launch,PENDING G4-G8; canonical unchanged
+BR-PUB-004,PARTIALLY IMPLEMENTED,Supporting fixture detail read only,AC-S1-01 and AC-S1-09,Search and filtering engine,PENDING G4-G8; canonical unchanged
+BR-APL-001,PARTIALLY IMPLEMENTED,Own submit on pre-qualified PUBLISHED fixture,AC-S1-02; NEG-S1-01 and NEG-S1-08,Generic eligibility policy and engine,PENDING G4-G8; canonical unchanged
+BR-APL-002,FULLY IMPLEMENTED CANDIDATE,Separate Application with student/opportunity/org relations,AC-S1-02; real SQL and unique constraint evidence,Independent review and acceptance,PENDING G4-G8; canonical unchanged
+BR-APL-003,FULLY IMPLEMENTED CANDIDATE,Own status list/detail,AC-S1-03; NEG-S1-02; STU-D07/08,Independent review and acceptance,PENDING G4-G8; canonical unchanged
+BR-APL-004,FULLY IMPLEMENTED CANDIDATE,Applicant list/detail restricted to officer own organization,AC-S1-04; NEG-S1-03/04; ORG-R05/06,Independent review and acceptance,PENDING G4-G8; canonical unchanged
+BR-APL-005,PARTIALLY IMPLEMENTED,Begin Review/Accept/Reject explicit commands,AC-S1-05/06/07; NEG-S1-05/06,Request Information and notification mechanism,PENDING G4-G8; canonical unchanged
+BR-APL-008,FULLY IMPLEMENTED CANDIDATE,Retained reject/withdraw history and atomic business audit,AC-S1-07/08; NEG-S1-07; DB audits and rollback,Independent review and acceptance,PENDING G4-G8; canonical unchanged
+BR-ORG-004,PARTIALLY IMPLEMENTED,Supporting own-org applicant decisions,AC-S1-04/05/06/07; NEG-S1-04,Broader organization decision operations,PENDING G4-G8; canonical unchanged
+BR-APL-006,NOT IMPLEMENTED,Out of approved scope,None,External ATS,PENDING separate scope
+BR-APL-007,NOT IMPLEMENTED,Out of approved scope,None,External selection result,PENDING separate scope
+BR-APL-009,NOT IMPLEMENTED,Out of approved scope,Zero TrainingJourney assertion,Training Journey readiness,PENDING separate scope

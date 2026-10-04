@@ -53,3 +53,33 @@ h1 {
   line-height: 1.9;
   margin-block: 0;
 }
+
+.application-shell { max-inline-size: 68rem; margin-inline: auto; padding: 1.25rem; min-block-size: 100vh; }
+.application-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-block-end: 2rem; }
+.application-header .brand-logo { inline-size: 11rem; margin: 0; }
+.application-header nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+a { color: var(--saql-blue); text-underline-offset: 0.3em; }
+.application-card { background: var(--saql-white); border: 1px solid var(--saql-divider); border-radius: 1rem; padding: clamp(1rem, 4vw, 2.5rem); }
+.application-card h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); margin-block-end: 2rem; }
+.application-card h2 { font-size: 1.3rem; line-height: 1.7; }
+.application-card p { line-height: 1.9; }
+.application-summary, .application-list li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; }
+.application-list { list-style: none; margin: 0; padding: 0; }
+.application-list li { padding-block: 1.25rem; border-block-end: 1px solid var(--saql-divider); }
+.application-list li:last-child { border: 0; }
+.application-list a { font-size: 1.2rem; font-weight: 700; }
+.application-list p, .empty-state { color: var(--saql-muted); }
+.application-status { display: inline-block; font-weight: 500; padding: 0.4rem 0.8rem; border: 1px solid var(--saql-divider); border-radius: 0.5rem; white-space: nowrap; }
+.application-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); gap: 1.5rem; padding-block: 1.5rem; }
+.application-facts dt { color: var(--saql-muted); margin-block-end: 0.5rem; }
+.application-facts dd { margin: 0; font-weight: 500; }
+.application-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 1.5rem; border-block-start: 1px solid var(--saql-divider); margin-block-start: 2rem; padding-block-start: 1.5rem; }
+button, .button-link { font: inherit; font-weight: 700; border-radius: 0.5rem; padding: 0.8rem 1.4rem; color: var(--saql-white); background: var(--saql-blue); border: 1px solid var(--saql-blue); cursor: pointer; text-decoration: none; display: inline-block; }
+button.secondary { background: var(--saql-white); color: var(--saql-ink); border-color: var(--saql-divider); }
+button:disabled { opacity: 0.6; cursor: wait; }
+button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 3px solid var(--saql-ink); outline-offset: 3px; }
+.application-actions form { max-inline-size: 28rem; inline-size: 100%; }
+label { display: block; font-weight: 500; margin-block-end: 0.6rem; }
+textarea { display: block; inline-size: 100%; min-block-size: 6rem; resize: vertical; font: inherit; padding: 0.75rem; border: 1px solid var(--saql-divider); border-radius: 0.5rem; margin-block-end: 0.8rem; }
+.form-error { font-weight: 500; border-inline-start: 3px solid var(--saql-ink); padding-inline-start: 0.8rem; }
+.opportunity-description, .application-list a { overflow-wrap: anywhere; }

@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main, "final-r0/**"]
+    branches: [main, "final-r0/**", "slice-01/application-core"]
 
 jobs:
   verify:
@@ -43,5 +43,9 @@ jobs:
       - run: npm run db:deploy
       - run: npm run db:seed
       - run: npm run ci
+      - name: Verify Slice01 persisted data and canonical seed counts
+        run: npm run test:slice01:db-evidence
+      - name: Reject test actor in production runtime
+        run: npm run test:production-actor-guard
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
