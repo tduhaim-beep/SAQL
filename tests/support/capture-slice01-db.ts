@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { writeFile } from "node:fs/promises";
+import { PrismaAcceptanceCoordinator } from "../../src/infrastructure/acceptance-coordinator";
 import { database } from "../../src/infrastructure/database";
 import { ApplicationService } from "../../src/modules/application/application/service";
 import { PrismaApplicationStore, PrismaPublishedOpportunityReader } from "../../src/infrastructure/application-store";
 import { createSliceFixture, cleanupSliceFixture } from "./slice01-fixtures";
 
 const client = database();
-const service = new ApplicationService(new PrismaApplicationStore(client), new PrismaPublishedOpportunityReader(client));
+const service = new ApplicationService(new PrismaApplicationStore(client), new PrismaPublishedOpportunityReader(client), new PrismaAcceptanceCoordinator(client));
 async function counts() {
   return { users: await client.appUser.count(), roles: await client.roleAssignment.count(), institutions: await client.institution.count(),
     organizations: await client.organization.count(), opportunities: await client.opportunity.count(), applications: await client.application.count(),
@@ -34,13 +35,13 @@ try {
   assert.deepEqual(rows.map((x) => x.auditCount), [3, 3, 2, 3]);
   assert.deepEqual(rows.map((x) => x.studentUserId), [f.studentA, f.studentB, f.studentA, f.studentB]);
   assert.deepEqual(rows.map((x) => x.organizationId), [f.orgA, f.orgA, f.orgB, f.orgB]);
-  assert.equal(await client.trainingJourney.count(), 0);
+  assert.equal(await client.trainingJourney.count(), 1);
   const audits = await client.auditEvent.findMany({ orderBy: { createdAt: "asc" }, select: { actorUserId: true, entityId: true, action: true, createdAt: true, metadata: true } });
-  assert.equal(audits.length, 11);
+  assert.equal(audits.length, 12);
   assert.ok(audits.every((x) => x.actorUserId && x.createdAt && x.metadata));
   assert.deepEqual(audits.find((x) => x.action === "Application.Rejected")?.metadata, { fromStatus: "UNDER_REVIEW", toStatus: "REJECTED", rejectionReason: "سبب رفض اصطناعي للتحقق" });
   evidence = { outcome: "PASS", baselineCounts: before, fixtureCounts: await counts(), directSQLApplicationRows: rows, actualBusinessAudits: audits,
-    assertions: { student_opportunity_organization_relations: true, accepted_rejected_withdrawn_retained: true, audit_actor_resource_time_reason: true, no_TrainingJourney_created: true, no_canonical_seed_change: true } };
+    assertions: { student_opportunity_organization_relations: true, accepted_rejected_withdrawn_retained: true, audit_actor_resource_time_reason: true, approved_Slice02_PENDING_START_bridge: true, no_canonical_seed_change: true } };
 } finally { await cleanupSliceFixture(f); }
 const after = await counts(); assert.deepEqual(after, before);
 evidence.canonicalSeedCountsAfterCleanup = after;

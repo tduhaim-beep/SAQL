@@ -1,4 +1,4 @@
-# SAQL AI Engineering Guardrails — Pilot v2.0 / Slice 1
+# SAQL AI Engineering Guardrails — Pilot v2.0 / Slice 2
 
 This repository is an implementation artifact. Current Project Sources remain the source of truth. Read this file first, then `docs/codex/codex-start-here.md`.
 

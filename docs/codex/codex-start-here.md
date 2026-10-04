@@ -1,4 +1,4 @@
-# Codex Start Here — SAQL Pilot v2.0 / Slice01
+# Codex Start Here — SAQL Pilot v2.0 / Slice02
 
 ## Mandatory read order
 1. `/AGENTS.md`
@@ -13,9 +13,14 @@
 `docs/reconciliation/pre-r0-reconciliation.md` records the earlier foundation phase. It is not part of the mandatory current read order and does not govern the approved Slice01 task.
 
 ## Current task boundary
-Final R0 passed at `9b44609aa58f2d9e221bb7011b5b20238ff4313c`. Founder approval in Master Index v2.6, AER v2.5, Business Development Handoff v1.0 and approved `12_Slice01_Application_Core_Task_Packet_v0.1_AR.md` releases **S1-APL-CORE-001 v0.1 only**, on `slice-01/application-core`. Earlier Pre-R0 Business Coding HOLD instructions are historical for this approved scope.
+Slice01 is G8 ACCEPTED / MERGED at `6c6772c25593f2d0454ea779eec37a18b822bee2` with post-merge Hosted CI GREEN. Read the portable execution pack's `00_READ_FIRST.md` fully, then its approved `19_Slice02_Training_Journey_Readiness_Bridge_Task_Packet_v0.1_AR.docx`, current-state snapshot and state/permission/traceability controls. The sources stay outside the repository and are read-only.
 
-Read `docs/slices/S1-APL-CORE-001_BUILDER_HANDOFF.md` and the approved packet before changing this slice. Independent G4 review returned REWORK on `66cc5a68c5541a0d1d1f4d9e868138949c3539d4`; the current Builder task is limited to the three corrections in `14_Codex_Slice01_G4_REWORK_Prompt_AR.txt`. Builder stops after required tests and Hosted CI evidence, ready for G4 re-review. G5 Test Agent, G6 independent Security Review, G7 Evidence governance and G8 Founder Acceptance remain NOT STARTED. No merge, later slice, Training Journey, Request Information, identity provider, schema migration or scope expansion is authorized.
+G3 releases **S2-TRN-READY-001 v0.1 only**, on `slice-02/training-journey-readiness`, descending from that merge. The approved §4 Control Delta allows authorized own-organization Accept to create exactly one PENDING_START journey atomically with correlated audit, for configured AcademicOverlayMode=NOT_APPLICABLE only. Read `docs/slices/S2-TRN-READY-001_BUILDER_HANDOFF.md` for implementation/evidence boundaries.
+
+Stop after Builder tests and exact-commit Hosted CI evidence. Independent Validation (G4–G5), triggered Security (G6), Closeout/Founder Acceptance (G7–G8), merge and Production remain separate and NOT STARTED by Builder. No ACTIVE/Actual Start, Plan Instance, supervisor assignment, Academic Overlay, Request Information, scoring, identity provider or further slice is authorized. Any requirement gap or missing authority means STOP; do not guess.
+
+## Historical / Supporting context only
+`docs/slices/S1-APL-CORE-001_BUILDER_HANDOFF.md` records the earlier Builder submission. The execution pack's Slice01 G7/G8 Closeout is the current accepted baseline evidence.
 
 ## Do not do
 - Do not use the old University-centric v1 module layout as product truth.

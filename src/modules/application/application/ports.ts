@@ -10,6 +10,14 @@ export interface ApplicationView {
   organizationName: string;
   status: ApplicationStatus;
   createdAt: string;
+  // Resource reference used by the approved post-acceptance navigation only.
+  journeyId: string | null;
+}
+
+// Cross-domain unit of work: decision, PENDING_START creation and both audits
+// commit together. No caller-supplied state, links or program configuration.
+export interface AcceptanceCoordinator {
+  accept(input: { id: string; organizationIds: string[]; actorUserId: string }): Promise<ApplicationView>;
 }
 
 export interface ApplicationStore {
@@ -17,7 +25,7 @@ export interface ApplicationStore {
   find(id: string, scope: ApplicationScope): Promise<ApplicationView | null>;
   submitWithAudit(studentUserId: string, opportunityId: string): Promise<ApplicationView>;
   transitionWithAudit(input: {
-    id: string; scope: ApplicationScope; actorUserId: string; command: ApplicationCommand;
+    id: string; scope: ApplicationScope; actorUserId: string; command: Exclude<ApplicationCommand, "accept">;
     expectedStatus: ApplicationStatus; nextStatus: ApplicationStatus; rejectionReason?: string;
   }): Promise<ApplicationView>;
 }
