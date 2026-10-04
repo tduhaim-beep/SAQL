@@ -16,4 +16,23 @@ describe("current source hierarchy", () => {
     expect(text).toContain("authorize G3 Builder for Slice01 Application Core only");
     expect(text).toContain("Business Coding outside the approved Slice01 remains HOLD");
   });
+  it("keeps Pre-R0 reconciliation out of the current phase and mandatory read order", () => {
+    const agents = readFileSync("AGENTS.md", "utf8");
+    const start = readFileSync("docs/codex/codex-start-here.md", "utf8");
+    const baselines = readFileSync("docs/requirements/current-baselines.md", "utf8");
+    expect(agents.split("\n")[0]).toContain("Pilot v2.0 / Slice 1");
+    expect(agents.split("\n")[0]).not.toContain("Pre-R0");
+    expect(start.split("\n")[0]).not.toContain("Pre-R0");
+    expect(baselines.split("\n")[0]).toContain("Pilot v2.0 / Slice01");
+    expect(baselines.split("\n")[0]).not.toContain("Pre-R0");
+    const mandatory = start.split("## Mandatory read order")[1]?.split("\n## ")[0];
+    expect(mandatory).toBeDefined();
+    expect(mandatory).not.toContain("pre-r0-reconciliation.md");
+    expect(start.split("## Historical / Supporting context only")[1]).toContain("pre-r0-reconciliation.md");
+    const current = baselines.split("Current source-of-truth references:")[1]?.split("Historical / Supporting references only:")[0];
+    expect(current).toContain("Stage 08B v0.2");
+    expect(current).toContain("Approved / Current R0 Evidence");
+    expect(current).not.toContain("Stage 08B v0.1");
+    expect(baselines.split("Historical / Supporting references only:")[1]).toContain("Stage 08B v0.1 — Historical");
+  });
 });

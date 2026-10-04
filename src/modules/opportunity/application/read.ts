@@ -1,6 +1,5 @@
 export interface PublishedOpportunity {
   id: string;
-  organizationId: string;
   organizationName: string;
   titleAr: string;
   descriptionAr: string;

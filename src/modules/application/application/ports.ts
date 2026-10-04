@@ -1,24 +1,15 @@
 import type { ApplicationCommand, ApplicationStatus } from "../domain/lifecycle";
 
 export type ApplicationScope = { studentUserId: string } | { organizationIds: string[] };
-export interface ApplicationHistory {
-  action: string;
-  createdAt: string;
-  fromStatus: ApplicationStatus | null;
-  toStatus: ApplicationStatus;
-  rejectionReason: string | null;
-}
+// Approved presentation DTO only. Internal AuditEvent evidence is retained in
+// persistence and must not be serialized into Slice01 API or screen responses.
 export interface ApplicationView {
   id: string;
-  studentUserId: string;
   studentName: string;
-  opportunityId: string;
   opportunityTitle: string;
-  organizationId: string;
   organizationName: string;
   status: ApplicationStatus;
   createdAt: string;
-  history: ApplicationHistory[];
 }
 
 export interface ApplicationStore {

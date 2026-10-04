@@ -35,8 +35,5 @@ export function ApplicationDetails({ application }: { application: ApplicationVi
     <dl className="application-facts"><div><dt>جهة التدريب</dt><dd>{application.organizationName}</dd></div>
       <div><dt>المتقدم</dt><dd>{application.studentName}</dd></div>
       <div><dt>تاريخ التقديم</dt><dd><time dateTime={application.createdAt}>{new Date(application.createdAt).toLocaleDateString("ar-SA")}</time></dd></div></dl>
-    <section aria-label="سجل الطلب"><h2>سجل الطلب</h2><ol className="application-history">{application.history.map((entry, index) =>
-      <li key={`${entry.createdAt}-${index}`}><Status status={entry.toStatus} /> <time dateTime={entry.createdAt}>{new Date(entry.createdAt).toLocaleString("ar-SA")}</time>
-        {entry.rejectionReason && <p>سبب الرفض: {entry.rejectionReason}</p>}</li>)}</ol></section>
   </>;
 }

@@ -24,7 +24,17 @@ async function saveEvidence(info: TestInfo, name: string, data: unknown) {
   const path = info.outputPath(name); await writeFile(path, JSON.stringify(data, null, 2));
   await info.attach(name, { path, contentType: "application/json" });
 }
+function expectPresentation(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Expected Application presentation DTO");
+  expect(Object.keys(value).sort()).toEqual(["id", "studentName", "opportunityTitle", "organizationName", "status", "createdAt"].sort());
+}
+async function expectNoAuditScreen(page: Page) {
+  await expect(page.getByRole("heading", { name: "سجل الطلب" })).toHaveCount(0);
+  await expect(page.locator(".application-history")).toHaveCount(0);
+  await expect(page.getByText("سبب رفض اصطناعي للاختبار", { exact: true })).toHaveCount(0);
+}
 async function brandEvidence(page: Page, info: TestInfo, screen: string) {
+  await expectNoAuditScreen(page);
   const screenId = screen.startsWith("PUB-") ? "PUB-08 / STU-D03"
     : screen.startsWith("ORG-R06") ? "ORG-R06 / ORG-R07"
     : screen.startsWith("STU-D08") ? "STU-D08" : screen;
@@ -109,22 +119,47 @@ test.describe("S1 Application Core", () => {
     await saveEvidence(info, "DB-accept-audit.json", { applicationId: id, statuses: audits.map((x) => x.metadata), journeyCount: 0 });
   });
 
-  test("AC07 rejection reason/history shown, no information-request action", async ({ page, browser, baseURL }, info) => {
+  test("AC07 G4 rejection audit retained internally, presentation minimized, no information-request action", async ({ page, browser, baseURL }, info) => {
     const base = baseURL ?? "http://127.0.0.1:3000"; const student = await actorPage(browser, base, f.studentA, contexts);
     const submitted = await student.request.post("/api/applications", { headers: { Origin: base }, data: { opportunityId: f.publishedA } }); expect(submitted.status()).toBe(201);
-    const { id } = await submitted.json() as { id: string }; const officer = await actorPage(browser, base, f.officerA, contexts);
+    const submittedDTO: unknown = await submitted.json(); expectPresentation(submittedDTO);
+    const { id } = submittedDTO as { id: string }; const officer = await actorPage(browser, base, f.officerA, contexts);
     await officer.setViewportSize(page.viewportSize() ?? { width: 1280, height: 720 });
-    await officer.goto(`/organization/applicants/${id}`); await officer.getByRole("button", { name: "بدء المراجعة" }).click();
+    await officer.goto(`/organization/applicants/${id}`);
+    const reviewResponse = officer.waitForResponse((response) => response.url().endsWith(`/${id}/begin-review`) && response.request().method() === "POST");
+    await officer.getByRole("button", { name: "بدء المراجعة" }).click();
+    const reviewingDTO: unknown = await (await reviewResponse).json(); expectPresentation(reviewingDTO);
     await expect(officer.getByLabel("سبب الرفض")).toBeVisible(); await officer.getByLabel("سبب الرفض").fill("سبب رفض اصطناعي للاختبار");
+    const rejectResponse = officer.waitForResponse((response) => response.url().endsWith(`/${id}/reject`) && response.request().method() === "POST");
     await officer.getByRole("button", { name: "رفض الطلب" }).click(); await expect(officer.locator(".application-summary [data-status='REJECTED']")).toBeVisible();
-    await expect(officer.getByText("سبب الرفض: سبب رفض اصطناعي للاختبار")).toBeVisible();
+    const rejectedDTO: unknown = await (await rejectResponse).json(); expectPresentation(rejectedDTO);
+    await expectNoAuditScreen(officer);
     await expect(officer.getByRole("button", { name: /طلب معلومات/ })).toHaveCount(0); await brandEvidence(officer, info, "ORG-R06-R07-rejected");
-    await student.goto(`/applications/${id}`); await expect(student.getByText("سبب الرفض: سبب رفض اصطناعي للاختبار")).toBeVisible();
+    await student.goto(`/applications/${id}`); await expect(student.locator(".application-summary [data-status='REJECTED']")).toBeVisible();
+    await expectNoAuditScreen(student); await brandEvidence(student, info, "STU-D08-rejected");
+    const presentation: Record<string, unknown> = { submittedDTO, reviewingDTO, rejectedDTO };
+    for (const [label, actor, path] of [
+      ["Student detail", student, `/api/applications/${id}`], ["Organization detail", officer, `/api/organization/applicants/${id}`],
+      ["Student list", student, "/api/applications"], ["Organization list", officer, "/api/organization/applicants"],
+    ] as const) {
+      const response = await actor.request.get(path); expect(response.status()).toBe(200);
+      const body: unknown = await response.json();
+      for (const item of Array.isArray(body) ? body : [body]) expectPresentation(item);
+      presentation[label] = body;
+    }
+    const serialized = JSON.stringify(presentation);
+    for (const privateValue of [f.studentA, f.orgA, "سبب رفض اصطناعي للاختبار", "history", "rejectionReason", "Application.Rejected"]) expect(serialized).not.toContain(privateValue);
+    for (const actor of [student, officer]) {
+      const html = await actor.locator("main").innerHTML();
+      for (const privateValue of [f.studentA, f.orgA, "سبب رفض اصطناعي للاختبار", "سجل الطلب"]) expect(html).not.toContain(privateValue);
+    }
+    await saveEvidence(info, "G4-presentation-minimization.json", { responses: presentation, UI_audit_history_absent: true, internal_ids_absent: true });
     expect(await database().application.count({ where: { id, status: "REJECTED" } })).toBe(1);
     expect(await database().auditEvent.count({ where: { entityId: id } })).toBe(3);
+    expect(await database().auditEvent.findFirst({ where: { entityId: id, action: "Application.Rejected" } })).toMatchObject({ actorUserId: f.officerA, metadata: { rejectionReason: "سبب رفض اصطناعي للاختبار" } });
   });
 
-  test("AC08 withdraw from applied and under review retains history", async ({ page, browser, baseURL }, info) => {
+  test("AC08 withdraw from applied and under review retains internal audit only", async ({ page, browser, baseURL }, info) => {
     const base = baseURL ?? "http://127.0.0.1:3000"; const student = await actorPage(browser, base, f.studentA, contexts); const officer = await actorPage(browser, base, f.officerA, contexts);
     await student.setViewportSize(page.viewportSize() ?? { width: 1280, height: 720 });
     const first = await student.request.post("/api/applications", { headers: { Origin: base }, data: { opportunityId: f.publishedA } }); expect(first.status()).toBe(201);

@@ -6,6 +6,8 @@ test("R0 foundation page is Arabic RTL and uses current SAQL identity", async ({
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page.getByAltText("صقل SAQL")).toBeVisible();
   await expect(page.getByRole("heading", { name: "الأساس الهندسي" })).toBeVisible();
+  await expect(page.locator(".eyebrow")).toHaveText("Pilot v2.0");
+  await expect(page.getByText(/Pre-R0 Reconciliation/)).toHaveCount(0);
   await expect(page.getByText("نصقل التجربة. نبني الجاهزية.")).toHaveCount(0);
   const family = await page.locator("body").evaluate((el) => getComputedStyle(el).fontFamily);
   expect(family).toMatch(/Tajawal/i);
@@ -16,4 +18,7 @@ test("R0 foundation page is Arabic RTL and uses current SAQL identity", async ({
     );
   });
   expect(tajawalLoaded).toBe(true);
+  const screenshot = test.info().outputPath("foundation-Pilot-v2.png");
+  await page.screenshot({ path: screenshot, fullPage: true });
+  await test.info().attach("current-phase-foundation", { path: screenshot, contentType: "image/png" });
 });

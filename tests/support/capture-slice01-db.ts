@@ -38,6 +38,7 @@ try {
   const audits = await client.auditEvent.findMany({ orderBy: { createdAt: "asc" }, select: { actorUserId: true, entityId: true, action: true, createdAt: true, metadata: true } });
   assert.equal(audits.length, 11);
   assert.ok(audits.every((x) => x.actorUserId && x.createdAt && x.metadata));
+  assert.deepEqual(audits.find((x) => x.action === "Application.Rejected")?.metadata, { fromStatus: "UNDER_REVIEW", toStatus: "REJECTED", rejectionReason: "سبب رفض اصطناعي للتحقق" });
   evidence = { outcome: "PASS", baselineCounts: before, fixtureCounts: await counts(), directSQLApplicationRows: rows, actualBusinessAudits: audits,
     assertions: { student_opportunity_organization_relations: true, accepted_rejected_withdrawn_retained: true, audit_actor_resource_time_reason: true, no_TrainingJourney_created: true, no_canonical_seed_change: true } };
 } finally { await cleanupSliceFixture(f); }

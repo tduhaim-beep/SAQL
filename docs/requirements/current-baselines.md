@@ -15,7 +15,10 @@ Current source-of-truth references:
 - SAQL Brand Identity v1.1 — current visual identity source.
 - Stage 08 — Engineering Foundation & Codex Readiness v2.1.
 - Stage 08A — Implementation Control Pack v2.1.
-- Stage 08B v0.1 — Historical repository verification evidence from the pre-Brand-v1.1 state; it does not establish current Brand/RTL PASS.
+- Stage 08B v0.2 — `08B_R0_v2_Repository_Reconciliation_Verification_v0.2_AR.docx` — Approved / Current R0 Evidence, as registered by CAN-MI v2.6 and Business Development Handoff v1.0. Current Slice01 verification still requires fresh local/Hosted evidence on its exact commit.
 - Codex Handoff v2.1 — historical Pre-R0 handoff; superseded for this approved Slice01 phase by CAN-11/CAN-12 above. Business Coding outside the approved Slice01 remains HOLD.
 
-Historical `saql-development-handoff-v1`, the old visual references, and the 402-row v1 traceability matrix are superseded for Pilot v2 business implementation.
+Historical / Supporting references only:
+- Stage 08B v0.1 — Historical repository verification evidence from the pre-Brand-v1.1 state; it does not establish current Brand/RTL PASS.
+- `docs/reconciliation/pre-r0-reconciliation.md` — historical foundation reconciliation, not current phase authority.
+- Historical `saql-development-handoff-v1`, the old visual references, and the 402-row v1 traceability matrix are superseded for Pilot v2 business implementation.
