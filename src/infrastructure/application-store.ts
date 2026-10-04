@@ -1,6 +1,5 @@
 import { Prisma, type PrismaClient } from "../generated/prisma/client";
 import type { ApplicationScope, ApplicationStore, ApplicationView } from "../modules/application/application/ports";
-import type { ApplicationStatus } from "../modules/application/domain/lifecycle";
 import type { PublishedOpportunityReader } from "../modules/opportunity/application/read";
 import { ApplicationError } from "../shared/application-error";
 
