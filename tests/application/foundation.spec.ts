@@ -10,6 +10,10 @@ describe("current source hierarchy", () => {
     expect(text).toContain("Engineering Foundation & Codex Readiness v2.1");
     expect(text).toContain("Implementation Control Pack v2.1");
     expect(text).toContain("SAQL Brand Identity v1.1");
-    expect(text).toContain("Business feature coding remains HOLD");
+    expect(text).toContain("Master Index v2.6");
+    expect(text).toContain("AER v2.5");
+    expect(text).toContain("S1-APL-CORE-001 v0.1 Task Packet");
+    expect(text).toContain("authorize G3 Builder for Slice01 Application Core only");
+    expect(text).toContain("Business Coding outside the approved Slice01 remains HOLD");
   });
 });
