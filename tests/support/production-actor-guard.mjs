@@ -27,7 +27,13 @@ try {
   assert.equal(mutation.status, 401); assert.equal((await mutation.json()).code, "TEST_ACTOR_DISABLED");
   const anonymous = await fetch(`${base}/api/applications`);
   assert.equal(anonymous.status, 401);
+  for (const path of ["/api/journeys/synthetic-journey", "/api/organization/journeys/synthetic-journey"]) {
+    const journey = await fetch(`${base}${path}`, { headers });
+    assert.equal(journey.status, 401); assert.equal((await journey.json()).code, "TEST_ACTOR_DISABLED");
+    assert.equal((await fetch(`${base}${path}`)).status, 401);
+  }
   console.log("NEG-S1-09 PASS: actual production build rejects test identity on GET and POST, even APP_ENV=test + adapter enabled + valid token; anonymous access denied.");
+  console.log("NEG-S2-09 PASS: student and organization Journey reads reject the test actor and anonymous access in the actual production build.");
 } catch (error) {
   console.error(output.replaceAll(token, "[test-token-redacted]")); throw error;
 } finally {

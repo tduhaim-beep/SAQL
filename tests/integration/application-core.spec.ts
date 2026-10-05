@@ -2,12 +2,13 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Actor } from "../../src/identity/actor";
 import { ApplicationService } from "../../src/modules/application/application/service";
 import { PrismaApplicationStore, PrismaPublishedOpportunityReader } from "../../src/infrastructure/application-store";
+import { PrismaAcceptanceCoordinator } from "../../src/infrastructure/acceptance-coordinator";
 import { database } from "../../src/infrastructure/database";
 import { createSliceFixture, cleanupSliceFixture, type SliceFixture } from "../support/slice01-fixtures";
 
 describe("Application Core real PostgreSQL isolation and audit", () => {
   let f: SliceFixture; let student: Actor; let other: Actor; let officer: Actor; let foreignOfficer: Actor;
-  const client = database(); const service = new ApplicationService(new PrismaApplicationStore(client), new PrismaPublishedOpportunityReader(client));
+  const client = database(); const service = new ApplicationService(new PrismaApplicationStore(client), new PrismaPublishedOpportunityReader(client), new PrismaAcceptanceCoordinator(client));
   beforeEach(async () => {
     f = await createSliceFixture(); student = { userId: f.studentA, grants: [{ role: "STUDENT_TRAINEE" }] };
     other = { userId: f.studentB, grants: [{ role: "STUDENT_TRAINEE" }] };
@@ -37,16 +38,16 @@ describe("Application Core real PostgreSQL isolation and audit", () => {
     await expect(service.applicants({ userId: f.admin, grants: [{ role: "SUPER_ADMIN" }] })).rejects.toMatchObject({ httpStatus: 403 });
     expect(await client.auditEvent.count({ where: { entityId: a.id } })).toBe(1);
   });
-  it("AC05/06 + NEG05/06/07 review/accept never creates journey", async () => {
+  it("AC05/06 + NEG05/06/07 review/accept applies approved Slice02 PENDING_START bridge", async () => {
     const a = await service.submit(student, f.publishedA);
     await expect(service.accept(officer, a.id)).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
     await expect(service.reject(officer, a.id, "سبب")).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
     expect((await service.beginReview(officer, a.id)).status).toBe("UNDER_REVIEW");
     const accepted = await service.accept(officer, a.id); expect(accepted.status).toBe("ACCEPTED");
     const history = await client.auditEvent.findMany({ where: { entityId: a.id }, orderBy: [{ createdAt: "asc" }, { id: "asc" }] });
-    expect(history.map((x) => x.metadata)).toEqual([{ toStatus: "APPLIED" }, { fromStatus: "APPLIED", toStatus: "UNDER_REVIEW" }, { fromStatus: "UNDER_REVIEW", toStatus: "ACCEPTED" }]);
+    expect(history.map((x) => x.metadata)).toMatchObject([{ toStatus: "APPLIED" }, { fromStatus: "APPLIED", toStatus: "UNDER_REVIEW" }, { fromStatus: "UNDER_REVIEW", toStatus: "ACCEPTED" }]);
     await expect(service.withdraw(student, a.id)).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
-    expect(await client.trainingJourney.count({ where: { applicationId: a.id } })).toBe(0);
+    expect(await client.trainingJourney.count({ where: { applicationId: a.id } })).toBe(1);
     expect(await client.auditEvent.findFirst({ where: { entityId: a.id, action: "Application.Accepted" } })).toMatchObject({ actorUserId: f.officerA, metadata: { fromStatus: "UNDER_REVIEW", toStatus: "ACCEPTED" } });
   });
   it("AC07 reason required, reject history retained and no extra audit on denial", async () => {
@@ -87,7 +88,7 @@ describe("Application Core real PostgreSQL isolation and audit", () => {
     const rejected = await service.reject(officer, submitted.id, "سبب داخلي محفوظ لا يعرض للواجهة");
     const responses = [submitted, reviewing, rejected, await service.myApplication(student, submitted.id), await service.applicant(officer, submitted.id),
       ...await service.myApplications(student), ...await service.applicants(officer)];
-    const allowed = ["id", "studentName", "opportunityTitle", "organizationName", "status", "createdAt"].sort();
+    const allowed = ["id", "studentName", "opportunityTitle", "organizationName", "status", "createdAt", "journeyId"].sort();
     for (const response of responses) {
       expect(Object.keys(response).sort()).toEqual(allowed);
       const serialized = JSON.stringify(response);

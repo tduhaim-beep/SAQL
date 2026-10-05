@@ -10,20 +10,20 @@ describe("current source hierarchy", () => {
     expect(text).toContain("Engineering Foundation & Codex Readiness v2.1");
     expect(text).toContain("Implementation Control Pack v2.1");
     expect(text).toContain("SAQL Brand Identity v1.1");
-    expect(text).toContain("Master Index v2.6");
-    expect(text).toContain("AER v2.5");
-    expect(text).toContain("S1-APL-CORE-001 v0.1 Task Packet");
-    expect(text).toContain("authorize G3 Builder for Slice01 Application Core only");
-    expect(text).toContain("Business Coding outside the approved Slice01 remains HOLD");
+    expect(text).toContain("Master Index v3.0");
+    expect(text).toContain("AER v2.9");
+    expect(text).toContain("S2-TRN-READY-001 v0.1 Task Packet");
+    expect(text).toContain("authorize G3 Builder for Slice02 Acceptance → PENDING_START only");
+    expect(text).toContain("Business Coding outside the approved Slice02 remains HOLD");
   });
   it("keeps Pre-R0 reconciliation out of the current phase and mandatory read order", () => {
     const agents = readFileSync("AGENTS.md", "utf8");
     const start = readFileSync("docs/codex/codex-start-here.md", "utf8");
     const baselines = readFileSync("docs/requirements/current-baselines.md", "utf8");
-    expect(agents.split("\n")[0]).toContain("Pilot v2.0 / Slice 1");
+    expect(agents.split("\n")[0]).toContain("Pilot v2.0 / Slice 2");
     expect(agents.split("\n")[0]).not.toContain("Pre-R0");
     expect(start.split("\n")[0]).not.toContain("Pre-R0");
-    expect(baselines.split("\n")[0]).toContain("Pilot v2.0 / Slice01");
+    expect(baselines.split("\n")[0]).toContain("Pilot v2.0 / Slice02");
     expect(baselines.split("\n")[0]).not.toContain("Pre-R0");
     const mandatory = start.split("## Mandatory read order")[1]?.split("\n## ")[0];
     expect(mandatory).toBeDefined();

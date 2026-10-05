@@ -1,12 +1,11 @@
-# صقل — SAQL | R0 v2 Engineering Foundation
+# صقل — SAQL | Pilot v2.0 / Slice 2
 
 Founder-supervised, AI-assisted modular-monolith foundation for Pilot v2.0 of the Saudi training-journey platform.
 
 ## Current status
-**Pre-R0 reconciliation patch applied. Final R0 has not been run. Business feature coding is HOLD.**
+**Slice01 G8 ACCEPTED / MERGED; Slice02 G3 Builder only.**
 
-The repository is reconciled to SAQL Brand Identity v1.1 and the current Stage 07/08/08A v2.1 control references at the file/scaffold level. Final R0 still requires actual Node 24 + registry + PostgreSQL execution evidence.
-
+Current task: `S2-TRN-READY-001 v0.1`, from merge baseline `6c6772c25593f2d0454ea779eec37a18b822bee2`, under the approved portable Slice02 execution pack. Authorized own-organization acceptance creates exactly one PENDING_START journey for NOT_APPLICABLE mode; acceptance does not start training. No merge or Production is authorized. Read `docs/codex/codex-start-here.md` and `docs/slices/S2-TRN-READY-001_BUILDER_HANDOFF.md`.
 ## Approved runtime baseline
 - Node.js 24 LTS
 - Next.js / React / TypeScript
@@ -14,15 +13,11 @@ The repository is reconciled to SAQL Brand Identity v1.1 and the current Stage 0
 - Vitest + Playwright
 
 ## Start here
-1. Read `AGENTS.md`.
-2. Read `docs/codex/codex-start-here.md`.
-3. Read `docs/reconciliation/pre-r0-reconciliation.md`.
-4. Read `docs/implementation-control/README.md`.
-5. Run `npm run foundation:verify` (dependency-free precheck).
-6. Read `R0_FINAL_RUNBOOK.md`.
-7. In the target environment, set `DATABASE_URL` to a disposable PostgreSQL database and run `npm run r0:env-check`.
-8. Generate/review the first lockfile and Prisma baseline migration using the installed Node 24 + Prisma toolchain.
-9. After migration review, run the full commands in `R0_FINAL_RUNBOOK.md`, then update `R0_V2_VERIFICATION_EVIDENCE.txt` and return R0 PASS or R0 REWORK.
+1. Read the current Slice02 execution pack in its required order, then `AGENTS.md` and `docs/codex/codex-start-here.md`.
+2. Use Node 24 and a disposable PostgreSQL database; synthetic data only.
+3. Run `npm ci`, production audit, Prisma validate/generate, reviewed migration deploy and synthetic seed.
+4. Run `npm run ci`, `npm run test:slice01:db-evidence`, `npm run test:slice02:db-evidence`, `npm run test:production-actor-guard` and Desktop/Mobile `npm run test:e2e`.
+5. Require Hosted CI GREEN on the exact candidate before the G3 evidence handoff. Separate Independent Validation and Security remain required afterward.
 
 ## Mandatory product rules
 - Arabic-first RTL UI.
@@ -32,7 +27,4 @@ The repository is reconciled to SAQL Brand Identity v1.1 and the current Stage 0
 - Government production remains compliance-gated.
 - Synthetic data only until production/security gates are passed.
 
-See `R0_V2_STATUS.md` for reconciled vs blocked evidence.
-
-## Final R0 handoff
-For the next Codex task, start with `CODEX_FINAL_R0_TASK_PACKET.md` and follow `R0_FINAL_RUNBOOK.md`. This task is Final R0 verification only; do not start Slice 1.
+Historical R0 reports remain supporting foundation evidence; they do not establish the current Slice02 outcome.

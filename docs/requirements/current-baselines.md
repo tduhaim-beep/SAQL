@@ -1,6 +1,10 @@
-# Current Implementation Baselines — Pilot v2.0 / Slice01
+# Current Implementation Baselines — Pilot v2.0 / Slice02
 
-Current phase authority: Master Index v2.6, AER v2.5, approved Business Development Handoff v1.0 and S1-APL-CORE-001 v0.1 Task Packet. They authorize G3 Builder for Slice01 Application Core only, starting from Final R0 PASS commit `9b44609aa58f2d9e221bb7011b5b20238ff4313c`. The source documents are read-only handoff inputs outside repository code. Existing 225-requirement and machine-readable controls remain unchanged; implementation updates are proposed in `docs/slices/S1-APL-CORE-001_TRACEABILITY_DELTA_PROPOSAL.csv`, pending governance acceptance.
+Current phase authority: Project Master Index v3.0, AER v2.9, SAQL Lean Slice Governance Addendum v1.0 and approved S2-TRN-READY-001 v0.1 Task Packet, supplied in the read-only SAQL_Slice02_Codex_Execution_Pack_v0.1. They authorize G3 Builder for Slice02 Acceptance → PENDING_START only, starting from the accepted Slice01 merge `6c6772c25593f2d0454ea779eec37a18b822bee2`. Its post-merge Hosted CI is GREEN (37203602483). Independent Validation, triggered Security, Closeout, merge and Production are separate stages and are not authorized by this Builder task.
+
+The approved task-scoped Control Delta in Packet §4 governs only authorized Accept → exactly one PENDING_START journey, NOT_APPLICABLE program mode, atomic persistence, idempotency and correlated audit. Other state/permission/scoring controls remain unchanged. Project Sources remain read-only outside repository code. The pack's G8 traceability snapshot has newer Slice01 implementation/control-status values than the repository mirror; requirement semantics, state and permission files agree. Do not copy the snapshot into canonical controls during G3. Submit only a Slice02 Traceability Delta Proposal at Builder handoff.
+
+Business Coding outside the approved Slice02 remains HOLD. Historical Slice01 authority was Master Index v2.6 / AER v2.5 and S1-APL-CORE-001 v0.1 Task Packet; G8 acceptance supersedes the earlier Builder/re-review status.
 
 Codex must work from the latest current Project Sources and the machine-readable control pack, not historical handoffs or screenshots.
 
@@ -15,8 +19,8 @@ Current source-of-truth references:
 - SAQL Brand Identity v1.1 — current visual identity source.
 - Stage 08 — Engineering Foundation & Codex Readiness v2.1.
 - Stage 08A — Implementation Control Pack v2.1.
-- Stage 08B v0.2 — `08B_R0_v2_Repository_Reconciliation_Verification_v0.2_AR.docx` — Approved / Current R0 Evidence, as registered by CAN-MI v2.6 and Business Development Handoff v1.0. Current Slice01 verification still requires fresh local/Hosted evidence on its exact commit.
-- Codex Handoff v2.1 — historical Pre-R0 handoff; superseded for this approved Slice01 phase by CAN-11/CAN-12 above. Business Coding outside the approved Slice01 remains HOLD.
+- Stage 08B v0.2 — `08B_R0_v2_Repository_Reconciliation_Verification_v0.2_AR.docx` — Approved / Current R0 Evidence, retained through the accepted Slice01 merge. Current Slice02 verification still requires fresh local/Hosted evidence on its exact commit.
+- Codex Handoff v2.1 — historical Pre-R0 handoff; historical for this phase; current Slice02 authority is the approved execution pack above.
 
 Historical / Supporting references only:
 - Stage 08B v0.1 — Historical repository verification evidence from the pre-Brand-v1.1 state; it does not establish current Brand/RTL PASS.

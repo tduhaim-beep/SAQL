@@ -33,7 +33,9 @@ export async function cleanupSliceFixture(f: SliceFixture) {
   const client = database();
   await client.$transaction(async (tx) => {
     const applications = await tx.application.findMany({ where: { opportunityId: { startsWith: f.prefix } }, select: { id: true } });
-    await tx.auditEvent.deleteMany({ where: { entityType: "Application", entityId: { in: applications.map((x) => x.id) } } });
+    const journeys = await tx.trainingJourney.findMany({ where: { applicationId: { in: applications.map((x) => x.id) } }, select: { id: true } });
+    await tx.auditEvent.deleteMany({ where: { OR: [{ entityType: "Application", entityId: { in: applications.map((x) => x.id) } }, { entityType: "TrainingJourney", entityId: { in: journeys.map((x) => x.id) } }] } });
+    await tx.trainingJourney.deleteMany({ where: { id: { in: journeys.map((x) => x.id) } } });
     await tx.application.deleteMany({ where: { opportunityId: { startsWith: f.prefix } } });
     await tx.opportunity.deleteMany({ where: { id: { startsWith: f.prefix } } });
     await tx.appUser.deleteMany({ where: { id: { startsWith: f.prefix } } });

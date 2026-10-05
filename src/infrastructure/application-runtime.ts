@@ -3,10 +3,15 @@ import { resolveTestActor } from "../identity/test-actor";
 import { ApplicationService } from "../modules/application/application/service";
 import { database } from "./database";
 import { PrismaApplicationStore, PrismaPublishedOpportunityReader } from "./application-store";
+import { PrismaAcceptanceCoordinator } from "./acceptance-coordinator";
+import { PrismaJourneyReader } from "./journey-reader";
+import { JourneyService } from "../modules/training-journey/application/read";
 
 export function applicationService() {
-  return new ApplicationService(new PrismaApplicationStore(database()), new PrismaPublishedOpportunityReader(database()));
+  return new ApplicationService(new PrismaApplicationStore(database()), new PrismaPublishedOpportunityReader(database()), new PrismaAcceptanceCoordinator(database()));
 }
+
+export function journeyService() { return new JourneyService(new PrismaJourneyReader(database())); }
 
 export function actorFromHeaders(headers: Headers): Promise<Actor | null> {
   return resolveTestActor(headers, { nodeEnvironment: process.env.NODE_ENV, appEnvironment: process.env.APP_ENV,

@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test",
+    "test:e2e": "node scripts/run-e2e.mjs",
     "test:production-actor-guard": "node tests/support/production-actor-guard.mjs",
     "test:slice01:db-evidence": "tsx tests/support/capture-slice01-db.ts",
     "test:foundation:node": "node --test tests/foundation/*.test.mjs",
@@ -27,7 +27,8 @@
     "check:state-schema": "node scripts/check-state-schema-alignment.mjs",
     "db:assert-migration": "node scripts/check-migration-baseline.mjs",
     "r0:env-check": "node scripts/check-r0-target-env.mjs --environment-only",
-    "r0:gate-check": "node scripts/check-r0-target-env.mjs && npm run foundation:verify"
+    "r0:gate-check": "node scripts/check-r0-target-env.mjs && npm run foundation:verify",
+    "test:slice02:db-evidence": "tsx tests/support/capture-slice02-db.ts"
   },
   "dependencies": {
     "@prisma/client": "7.x",

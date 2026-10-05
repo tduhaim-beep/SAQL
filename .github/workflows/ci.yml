@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main, "final-r0/**", "slice-01/application-core"]
+    branches: [main, "final-r0/**", "slice-01/application-core", "slice-02/training-journey-readiness"]
 
 jobs:
   verify:
@@ -45,7 +45,16 @@ jobs:
       - run: npm run ci
       - name: Verify Slice01 persisted data and canonical seed counts
         run: npm run test:slice01:db-evidence
+      - name: Verify Slice02 journey links, correlated audit, retry and unchanged seed
+        run: npm run test:slice02:db-evidence
       - name: Reject test actor in production runtime
         run: npm run test:production-actor-guard
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+      - name: Upload G3 test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: slice02-g3-test-evidence
+          path: test-results/
+          retention-days: 14

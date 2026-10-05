@@ -2,7 +2,7 @@ import { officerOrganizations, requireStudent, type Actor } from "../../../ident
 import { ApplicationError } from "../../../shared/application-error";
 import type { PublishedOpportunityReader } from "../../opportunity/application/read";
 import { planApplicationTransition, type ApplicationCommand } from "../domain/lifecycle";
-import type { ApplicationScope, ApplicationStore } from "./ports";
+import type { AcceptanceCoordinator, ApplicationScope, ApplicationStore } from "./ports";
 
 export function resourceId(value: string): string {
   if (!/^[a-zA-Z0-9_-]{1,128}$/.test(value)) throw new ApplicationError("INVALID_RESOURCE", 400, "معرف غير صالح.");
@@ -10,7 +10,8 @@ export function resourceId(value: string): string {
 }
 
 export class ApplicationService {
-  constructor(private readonly store: ApplicationStore, private readonly opportunities: PublishedOpportunityReader) {}
+  constructor(private readonly store: ApplicationStore, private readonly opportunities: PublishedOpportunityReader,
+    private readonly acceptance: AcceptanceCoordinator) {}
 
   async publishedOpportunity(id: string) {
     const result = await this.opportunities.findPublished(resourceId(id));
@@ -46,7 +47,7 @@ export class ApplicationService {
     return result;
   }
 
-  private async transition(actor: Actor | null, id: string, command: ApplicationCommand, reason?: string) {
+  private async transition(actor: Actor | null, id: string, command: Exclude<ApplicationCommand, "accept">, reason?: string) {
     const scope: ApplicationScope = command === "withdraw"
       ? { studentUserId: requireStudent(actor).userId }
       : { organizationIds: officerOrganizations(actor) };
@@ -60,7 +61,11 @@ export class ApplicationService {
   }
 
   beginReview(actor: Actor | null, id: string) { return this.transition(actor, id, "begin-review"); }
-  accept(actor: Actor | null, id: string) { return this.transition(actor, id, "accept"); }
+  async accept(actor: Actor | null, id: string) {
+    const organizationIds = officerOrganizations(actor);
+    if (!actor) throw new ApplicationError("UNAUTHENTICATED", 401, "يلزم سياق مستخدم مصرح له.");
+    return this.acceptance.accept({ id: resourceId(id), organizationIds, actorUserId: actor.userId });
+  }
   reject(actor: Actor | null, id: string, reason: string) { return this.transition(actor, id, "reject", reason); }
   withdraw(actor: Actor | null, id: string) { return this.transition(actor, id, "withdraw"); }
 }

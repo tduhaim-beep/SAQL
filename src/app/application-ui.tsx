@@ -30,10 +30,14 @@ export function ApplicationList({ applications, officer = false }: { application
   </li>)}</ul>;
 }
 
-export function ApplicationDetails({ application }: { application: ApplicationView }) {
+export function ApplicationDetails({ application, officer = false }: { application: ApplicationView; officer?: boolean }) {
   return <><div className="application-summary"><h2>{application.opportunityTitle}</h2><Status status={application.status} /></div>
     <dl className="application-facts"><div><dt>جهة التدريب</dt><dd>{application.organizationName}</dd></div>
       <div><dt>المتقدم</dt><dd>{application.studentName}</dd></div>
       <div><dt>تاريخ التقديم</dt><dd><time dateTime={application.createdAt}>{new Date(application.createdAt).toLocaleDateString("ar-SA")}</time></dd></div></dl>
+    {application.status === "ACCEPTED" && application.journeyId && <section aria-label="الرحلة بعد القبول">
+      <p>أُنشئت رحلة التدريب وهي بانتظار البدء. قبول الطلب لا يعني بدء التدريب.</p>
+      <Link className="button-link" href={`${officer ? "/organization/journeys" : "/journeys"}/${application.journeyId}`}>عرض رحلة التدريب</Link>
+    </section>}
   </>;
 }
