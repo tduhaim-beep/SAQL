@@ -36,7 +36,7 @@ test.describe("S2 acceptance to pending Journey", () => {
     await saveEvidence(info, "S2-positive-persisted-journey.json", { applicationId: id, journey: j, acceptButtonRemoved: true, noTrainingStartActions: true });
   });
 
-  test("AC-S2-06/08 + NEG-S2-02/03/04/06/07/08 HTTP retries, scope, minimized DTO and unsupported mutations", async ({ page, browser, baseURL }, info) => {
+  test("AC-S2-06/08/09 + NEG-S2-02/03/04/06/07/08 HTTP retries, scope, Arabic denied UI and unsupported mutations", async ({ page, browser, baseURL }, info) => {
     const base = baseURL ?? "http://127.0.0.1:3000"; const origin = { Origin: base };
     const student = await actorPage(browser, base, f.studentA, contexts); const other = await actorPage(browser, base, f.studentB, contexts);
     const officer = await actorPage(browser, base, f.officerA, contexts); const foreign = await actorPage(browser, base, f.officerB, contexts);
@@ -70,8 +70,22 @@ test.describe("S2 acceptance to pending Journey", () => {
     for (const command of ["start", "activate", "confirm-actual-start"]) expect((await officer.request.post(`${orgPath}/${command}`, { headers: origin, data: {} })).status()).toBe(404);
     checks.massAssignment = (await officer.request.post(`/api/organization/applicants/${id}/accept`, { headers: origin, data: { overlayMode: "NOT_APPLICABLE", status: "ACTIVE", organizationId: f.orgB } })).status(); expect(checks.massAssignment).toBe(400);
     checks.crossOrgRetry = (await foreign.request.post(`/api/organization/applicants/${id}/accept`, { headers: origin, data: {} })).status(); expect(checks.crossOrgRetry).toBe(404);
-    await other.goto(`/journeys/${journeyId}`); await expect(other.getByText("فرصة تدريب اصطناعية أ", { exact: true })).toHaveCount(0);
-    await foreign.goto(`/organization/journeys/${journeyId}`); await expect(foreign.getByText("متقدم اصطناعي أ", { exact: true })).toHaveCount(0);
+    const deniedPages = [];
+    for (const [actor, path, screen] of [[other, "/journeys", "STU-T01"], [foreign, "/organization/journeys", "ORG-O02"]] as const) {
+      const response = await actor.goto(`${path}/${journeyId}`); expect(response?.status()).toBe(404);
+      await expect(actor.getByRole("heading", { name: "الرحلة غير متاحة", exact: true })).toBeVisible();
+      await expect(actor.getByRole("alert")).toHaveText("تعذر عرض رحلة التدريب.");
+      const deniedText = await actor.locator("main").innerText();
+      for (const privateValue of ["فرصة تدريب اصطناعية أ", "متقدم اصطناعي أ", "جهة تدريب اصطناعية أ",
+        journeyId, f.studentA, f.orgA, id, "correlationId", "metadata", "AuditEvent", "This page could not be found"]) expect(deniedText).not.toContain(privateValue);
+      expect(await actor.getByRole("heading", { level: 1 }).evaluate((node) => getComputedStyle(node).fontFamily)).toContain("Tajawal");
+      await brandEvidence(actor, info, screen);
+      const missing = await actor.goto(`${path}/${f.prefix}-missing-journey`); expect(missing?.status()).toBe(404);
+      await expect(actor.locator("main")).toHaveText(deniedText);
+      deniedPages.push({ screen, foreignResourceStatus: response?.status(), nonexistentResourceStatus: missing?.status(),
+        identicalUnavailablePresentation: true, privateResourceDataAbsent: true });
+    }
+    await saveEvidence(info, "S2-denied-journey-UI.json", { project: info.project.name, deniedPages });
     expect(await database().trainingJourney.count({ where: { applicationId: id } })).toBe(1);
     expect(await database().auditEvent.count({ where: { entityId: id, action: "Application.Accepted" } })).toBe(1);
     expect(await database().auditEvent.count({ where: { entityId: journeyId, action: "TrainingJourney.CreatedFromAcceptance" } })).toBe(1);
