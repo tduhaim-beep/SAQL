@@ -74,14 +74,14 @@ test.describe("S2 acceptance to pending Journey", () => {
     for (const [actor, path, screen] of [[other, "/journeys", "STU-T01"], [foreign, "/organization/journeys", "ORG-O02"]] as const) {
       const response = await actor.goto(`${path}/${journeyId}`); expect(response?.status()).toBe(404);
       await expect(actor.getByRole("heading", { name: "الرحلة غير متاحة", exact: true })).toBeVisible();
-      await expect(actor.getByRole("alert")).toHaveText("تعذر عرض رحلة التدريب.");
+      await expect(actor.locator("main").getByRole("alert")).toHaveText("تعذر عرض رحلة التدريب.");
       const deniedText = await actor.locator("main").innerText();
       for (const privateValue of ["فرصة تدريب اصطناعية أ", "متقدم اصطناعي أ", "جهة تدريب اصطناعية أ",
         journeyId, f.studentA, f.orgA, id, "correlationId", "metadata", "AuditEvent", "This page could not be found"]) expect(deniedText).not.toContain(privateValue);
       expect(await actor.getByRole("heading", { level: 1 }).evaluate((node) => getComputedStyle(node).fontFamily)).toContain("Tajawal");
       await brandEvidence(actor, info, screen);
       const missing = await actor.goto(`${path}/${f.prefix}-missing-journey`); expect(missing?.status()).toBe(404);
-      await expect(actor.locator("main")).toHaveText(deniedText);
+      expect(await actor.locator("main").innerText()).toBe(deniedText);
       deniedPages.push({ screen, foreignResourceStatus: response?.status(), nonexistentResourceStatus: missing?.status(),
         identicalUnavailablePresentation: true, privateResourceDataAbsent: true });
     }
